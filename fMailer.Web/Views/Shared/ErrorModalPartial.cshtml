@@ -1,0 +1,21 @@
+﻿<div id="errorModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="errorModalLabel">! Error</h3>
+    </div>
+    <div class="modal-body">
+        <p> 
+            Some error occurred, application can be unstable… <br />
+            Please reload page. 
+        </p>
+        <hr style="margin-bottom: 0px;" />
+        <a href="#" data-toggle="collapse" data-target="#errorDetailsExpander">
+            Error Details
+        </a> 
+        <div id="errorDetailsExpander" class="collapse"> 
+            <span id="errorDetails"> Some error details, like NRE or smb... </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" onclick="window.location.reload()">Reload Page</button>
+    </div>
+</div>

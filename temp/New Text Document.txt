@@ -1,0 +1,14 @@
+
+    @*<div style="color: Black;">
+        <span style="font-family: Segoe WP Light; font-size: 50px; font-weight: normal; margin-top: 10px;"> Light sample text (50px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe WP Semilight; font-size: 50px; font-weight: normal; margin-top: 15px;"> Semilight sample text (50px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe WP Black; font-size: 16px; font-weight: normal; margin-top: 15px;"> Black sample text (16px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe WP Semilight; font-size: 18px; font-weight: normal; margin-top: 15px;"> Semilight sample text (18px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe WP; font-size: 16px; font-weight: normal; margin-top: 15px;">Regular sample text (16px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe WP Semibold; font-size: 12px; font-weight: normal; margin-top: 15px;">Regular sample text (12px) [1234567890]</span><br /><br /><br /><br />
+        
+        <span style="font-family: Segoe UI Light; font-size: 30px; font-weight: normal; margin-top: 10px;"> Light sample text (50px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe UI Black; font-size: 16px; font-weight: normal; margin-top: 15px;"> Black sample text (16px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe UI; font-size: 16px; font-weight: normal; margin-top: 15px;">Regular sample text (16px) [1234567890]</span><br /><br />
+        <span style="font-family: Segoe UI Semibold; font-size: 12px; font-weight: normal; margin-top: 15px;">Regular sample text (12px) [1234567890]</span>
+    </div>*@

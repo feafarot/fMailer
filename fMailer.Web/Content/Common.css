@@ -1,0 +1,35 @@
+﻿/* ------------------------------------------------------------------------
+// <copyright file="Common.css" company="feafarot">
+//   Copyright © 2012 feafarot
+// </copyright>
+// ------------------------------------------------------------------------
+*/
+
+@font-face 
+{
+    font-family: Segoe WP;
+    src: url('Fonts/SegoeWP.ttf');
+}
+@font-face 
+{
+    font-family: Segoe WP Light;
+    src: url('Fonts/SegoeWP-Light.ttf');
+}
+@font-face 
+{
+    font-family: Segoe WP Semilight;
+    src: url('Fonts/SegoeWP-Semilight.ttf');
+}
+@font-face 
+{
+    font-family: Segoe WP Black;
+    src: url('Fonts/SegoeWP-Black.ttf');
+}
+@font-face 
+{
+    font-family: Segoe WP Semibold;
+    src: url('Fonts/SegoeWP-Semibold.ttf');
+}
+* {
+    text-
+}
