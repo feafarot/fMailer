@@ -1,0 +1,33 @@
+﻿@model fMailer.Web.Core.NonDomainModels.NavigationModel
+@using fMailer.Web
+@using fMailer.Web.Core
+@using fMailer.Web.Core.NonDomainModels
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href=""><span style="color: #0088CC">&</span>Mailer</a>
+            <nav class="nav-collapse collapse">
+                <ul class="nav">
+                    @foreach(var nitem in Model.NavigationItems)
+                    {
+                    <li class="@((Model.SelectedRouteName == nitem.RouteName) ? "active" : "")"><a href="@Url.RouteUrl(nitem.RouteName)"><img alt="@nitem.Caption" src="@Url.Content(nitem.ImageUrl)" />@nitem.Caption</a></li>
+                    }
+                </ul>
+                <ul class="nav pull-right">
+                    <li class="divider-vertical"></li>
+                    <li style="height: 40px;">
+                        <p>
+                            <img alt="Security" src="@Url.Content("~/Content/Images/Shield user.png")" style="margin: 7px 3px 7px 17px; height: 24px;" />Signed in as <a href="#" class="navbar-link">@Model.Request.GetUser().Login</a> | <a href="@Url.Action("SignOff", "Auth", null)">Sign Out</a>
+                        </p>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

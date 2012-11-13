@@ -18,7 +18,12 @@ namespace fMailer.Domain.ModelMappings
         public MailTemplateMapping()
         {
             Id(x => x.Id);
+
             Map(x => x.Text).Not.Nullable();
+            Map(x => x.Name).Not.Nullable();
+            Map(x => x.Description);
+
+            References(x => x.User).Column(ForeignKeys.UserFK).Not.Nullable();
         }
     }
 }

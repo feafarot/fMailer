@@ -8,9 +8,12 @@
         public ReplyMapping()
         {
             Id(x => x.Id);
+
             Map(x => x.RecievedOn).Not.Nullable();
             Map(x => x.EmailText).Not.Nullable();
-            References(x => x.From).Cascade.None();
+
+            References(x => x.From).Not.Nullable().Cascade.SaveUpdate();
+            References(x => x.Distribution).Not.Nullable().Cascade.SaveUpdate();
         }
     }
 }

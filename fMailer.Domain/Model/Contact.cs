@@ -22,5 +22,11 @@ namespace fMailer.Domain.Model
         public virtual string MiddleName { get; set; }
 
         public virtual string Email { get; set; }
+
+        public virtual IList<ContactsGroup> Groups { get; set; }
+
+        public virtual IList<Distribution> Distributions { get; set; }
+
+        public  virtual User User { get; set; }
     }
 }

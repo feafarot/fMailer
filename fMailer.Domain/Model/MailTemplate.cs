@@ -17,6 +17,12 @@ namespace fMailer.Domain.Model
 
         public virtual string Text { get; set; }
 
-        // TODO: Add some options.
+        public virtual string Name { get; set; }
+
+        public virtual string Description { get; set; }
+
+        public virtual IList<Distribution> Distributions { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace fMailer.Web.Core.Filters
         {
             if (uid.HasValue && sessionManager.ValidateSession(filterContext.HttpContext.Request.Cookies))
             {
-                filterContext.Result = GetRedirect(filterContext.HttpContext.Request, "Main", "Hub");
+                filterContext.Result = new RedirectToRouteResult(RouteNames.Distributions, null);
                 return false;
             }
 

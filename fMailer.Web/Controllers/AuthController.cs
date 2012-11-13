@@ -25,10 +25,11 @@ namespace fMailer.Web.Controllers
             return View();
         }
 
+        [AuthorizeRequired]
         public ActionResult SignOff()
         {
             SessionManager.EndSession(Request.Cookies);
-            return View();
+            return RedirectToRoute(RouteNames.SignOff);
         }
     }
 }

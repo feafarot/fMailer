@@ -33,6 +33,13 @@
             CommitTransaction();
         }
 
+        public virtual void Update<TEntity>(TEntity entity) where TEntity : class
+        {
+            BeginTransaction();
+            queryEngine.Update(entity);
+            CommitTransaction();
+        }
+
         public virtual void Delete<TEntity>(TEntity entity) where TEntity : class
         {
             BeginTransaction();
@@ -80,7 +87,7 @@
 
         public virtual void Submit()
         {
-            ////queryEngine.Submit();
+            queryEngine.Submit();
         }
 
         public virtual void Dispose()
@@ -98,7 +105,7 @@
 
         private void CommitTransaction()
         {
-            if (!isInTransaction)
+            if (isInTransaction)
             {
                 queryEngine.CommitTransaction();
             }

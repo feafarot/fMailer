@@ -14,6 +14,7 @@ namespace fMailer.Domain.ModelMappings
         public SettingsMapping()
         {
             Id(x => x.Id);
+
             Map(x => x.Signature);
         }
     }

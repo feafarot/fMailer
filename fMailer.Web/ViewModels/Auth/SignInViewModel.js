@@ -30,8 +30,8 @@ function SignInViewModel()
                 self.isBusy(false);
                 if (eval(result))
                 {
-                    self.isInvalidUser(false);
-                    navigate("Main/Hub");
+                    self.isInvalidUser(false);                    
+                    navigate("Distributions");
                 }
                 else
                 {

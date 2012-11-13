@@ -27,23 +27,7 @@ namespace fMailer.Web.Core
 
         public string BeginSession(User user)
         {
-            var sessions = repository.GetAll<Session>();
-            foreach (var session in sessions.Where(session => !session.Outdated))
-            {
-                session.Outdated = true;
-            }
-
-            //user.IsOnline = true;
-            var newSession = new Session
-                                 {
-                                     User = user,
-                                     Outdated = false,
-                                     SessionGuid = Guid.NewGuid(),
-                                     StartedAt = DateTime.Now
-                                 };
-            repository.Add(newSession);
-            repository.Submit();
-            return newSession.SessionGuid.ToString();
+            return BeginSession(user.Id);
         }
 
         public string BeginSession(int userId)

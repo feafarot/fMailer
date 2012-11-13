@@ -20,5 +20,7 @@ namespace fMailer.Domain.Model
         public virtual DateTime RecievedOn { get; set; }
 
         public virtual string EmailText { get; set; }
+
+        public virtual Distribution Distribution { get; set; }
     }
 }

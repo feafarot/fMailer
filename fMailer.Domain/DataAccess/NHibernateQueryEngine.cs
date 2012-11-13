@@ -8,6 +8,7 @@
     using NHibernate;
     using NHibernate.Linq;
     using fMailer.Domain.Model;
+    using System.Diagnostics;
 
     public class NHibernateQueryEngine : IQueryEngine
     {
@@ -33,6 +34,11 @@
         {
             session.Save(entity);
         }
+        
+        public void Update<TEntity>(TEntity entity) where TEntity : class
+        {
+            session.SaveOrUpdate(entity);
+        }
 
         public void Delete<TEntity>(TEntity entity) where TEntity : class
         {
@@ -41,30 +47,45 @@
 
         public void BeginTransaction()
         {
-            ////if (!session.Transaction.IsActive)
-            ////{
-            ////    session.Transaction.Begin();
-            ////}
+            if (!session.Transaction.IsActive)
+            {
+                session.Transaction.Begin();
+            }
+            else
+            {
+                Debug.WriteLine("Transaction is already started!");
+            }
         }
 
         public void CommitTransaction()
         {
-            ////if (session.Transaction.IsActive)
-            ////{
-            ////    session.Transaction.Commit();
-            ////    session.Transaction.Dispose();
-            ////}
+            if (session.Transaction.IsActive)
+            {
+                session.Transaction.Commit();
+                session.Transaction.Dispose();
+            }
+            else
+            {
+                Debug.WriteLine("There are no started transactions!");
+            }
         }
 
         public void RollBackTransaction()
         {
-            ////session.Transaction.Rollback();
+            session.Transaction.Rollback();
         }
 
         public void Submit()
         {
-            ////session.Transaction.Commit();
-            ////session.Transaction.Dispose();
+            if (session.Transaction != null && session.Transaction.IsActive)
+            {
+                session.Transaction.Commit();
+                session.Transaction.Dispose();
+            }
+            else
+            {
+                Debug.WriteLine("There are no started transactions!");
+            }
         }
 
         public void Dispose()

@@ -30,6 +30,16 @@
     font-family: Segoe WP Semibold;
     src: url('Fonts/SegoeWP-Semibold.ttf');
 }
-* {
-    text-
+* {    
+}
+.nav li a img,
+.navbar-text img
+{
+    height: 24px;
+    width: 24px;
+    margin: -5px 5px -5px;
+}
+.large 
+{
+    font-size: 50px;
 }

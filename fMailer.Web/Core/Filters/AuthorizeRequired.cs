@@ -17,13 +17,13 @@ namespace fMailer.Web.Core.Filters
         {
             if (!uid.HasValue)
             {
-                filterContext.Result = new RedirectToRouteResult(RouteNmaes.Login, null);
+                filterContext.Result = new RedirectToRouteResult(RouteNames.SignIn, null);
                 return false;
             }
 
             if (!sessionManager.ValidateSession(filterContext.HttpContext.Request.Cookies))
             {
-                filterContext.Result = new RedirectToRouteResult(RouteNmaes.Login, null);
+                filterContext.Result = new RedirectToRouteResult(RouteNames.SignIn, null);
                 return false;
             }
 

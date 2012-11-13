@@ -13,6 +13,8 @@ namespace fMailer.Domain.DataAccess
 
         void Add<TEntity>(TEntity entity) where TEntity : class;
 
+        void Update<TEntity>(TEntity entity) where TEntity : class;
+
         void Delete<TEntity>(TEntity entity) where TEntity : class;
 
         void DeleteAll<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;

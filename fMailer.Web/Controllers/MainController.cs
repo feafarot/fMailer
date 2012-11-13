@@ -19,8 +19,23 @@ namespace fMailer.Web.Controllers
             : base(repository, settings, sessionManager)
         {
         }
-                
-        public ActionResult Hub()
+
+        public ActionResult Distributions()
+        {
+            return View();
+        }
+
+        public ActionResult Templates()
+        {
+            return View();
+        }
+
+        public ActionResult Contacts()
+        {
+            return View();
+        }
+
+        public ActionResult ContactGroups()
         {
             return View();
         }

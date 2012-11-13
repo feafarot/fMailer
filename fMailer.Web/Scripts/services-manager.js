@@ -10,6 +10,12 @@ var authService = new function()
     return extended;
 };
 
+var templatesService = new function ()
+{
+    var extended = $.extend({}, new baseService("TemplatesDomain"));
+    return extended;
+};
+
 function baseService(service)
 {
     var serviceName = service;

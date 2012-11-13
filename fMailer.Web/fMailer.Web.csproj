@@ -143,12 +143,14 @@
     <Compile Include="AppStart\BundleConfig.cs" />
     <Compile Include="AppStart\FilterConfig.cs" />
     <Compile Include="AppStart\RouteConfig.cs" />
-    <Compile Include="AppStart\RouteNmaes.cs" />
+    <Compile Include="AppStart\RouteNames.cs" />
     <Compile Include="AppStart\WebApiConfig.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\Domain\TemplatesDomainController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\Domain\AuthDomainController.cs" />
+    <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\Filters\AuthorizeRequired.cs" />
     <Compile Include="Core\Filters\BaseActionFilter.cs" />
     <Compile Include="Core\Filters\OnlyNotAuthorized.cs" />
@@ -159,6 +161,8 @@
     <Compile Include="Core\JsonParamsValueProvider.cs" />
     <Compile Include="Core\JsonValueProviderFactory.cs" />
     <Compile Include="Core\JSResult.cs" />
+    <Compile Include="Core\NonDomainModels\NavigationItem.cs" />
+    <Compile Include="Core\NonDomainModels\NavigationModel.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -178,12 +182,21 @@
     <Content Include="Content\Bootstrap\Js\bootstrap.min.js" />
     <Content Include="Content\Common.css" />
     <Content Include="Content\Images\Add.png" />
+    <Content Include="Content\Images\Left Arrow.png" />
     <Content Include="Content\Images\LeftArrow.png" />
     <Content Include="Content\Images\Logout.png" />
+    <Content Include="Content\Images\Mail Out.png" />
+    <Content Include="Content\Images\Mail Server.png" />
+    <Content Include="Content\Images\Mail View.png" />
+    <Content Include="Content\Images\Mail Write.png" />
+    <Content Include="Content\Images\Mail%281%29.png" />
     <Content Include="Content\Images\Mail.png" />
     <Content Include="Content\Images\Mailbox.png" />
     <Content Include="Content\Images\Next.png" />
     <Content Include="Content\Images\Send.png" />
+    <Content Include="Content\Images\Shape63.png" />
+    <Content Include="Content\Images\Shield user.png" />
+    <Content Include="Content\Images\Text Editor.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -240,6 +253,10 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\helpers.js" />
+    <Content Include="Scripts\jwysiwyg\controls\wysiwyg.image.js" />
+    <Content Include="Scripts\jwysiwyg\controls\wysiwyg.link.js" />
+    <Content Include="Scripts\jwysiwyg\controls\wysiwyg.table.js" />
+    <Content Include="Scripts\jwysiwyg\jquery.wysiwyg.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\main.js" />
@@ -264,6 +281,8 @@
     <Content Include="Scripts\timers-manager.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ViewModels\Auth\SignInViewModel.js" />
+    <Content Include="ViewModels\Main\TemplatesViewModel.js" />
+    <Content Include="ViewModels\Main\DistributionsViewModel.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -298,8 +317,10 @@
     <None Include="Content\Fonts\SegoeWP-Semilight.ttf" />
     <None Include="Content\Fonts\SegoeWP.ttf" />
     <Content Include="Views\Auth\SignIn.cshtml" />
-    <Content Include="Views\Main\Hub.cshtml" />
+    <Content Include="Views\Main\Distributions.cshtml" />
     <Content Include="Views\Shared\ErrorModalPartial.cshtml" />
+    <Content Include="Views\Shared\NavigationPartial.cshtml" />
+    <Content Include="Views\Main\Templates.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

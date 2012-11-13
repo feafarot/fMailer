@@ -13,16 +13,18 @@ namespace fMailer.Domain.ModelMappings
     {
         public UserMapping()
         {
-            Table("Users");
             Id(x => x.Id).GeneratedBy.Foreign("Settings");
+
             Map(x => x.Login).Not.Nullable();
             Map(x => x.Password).Not.Nullable();
             Map(x => x.Email);
             Map(x => x.CreatedOn).Not.Nullable().Default("getdate()").Generated.Always();
+
             HasOne(x => x.Settings).Constrained().ForeignKey();
+
             HasMany(x => x.Contacts).Cascade.All();
             HasMany(x => x.ContactsGroups).Cascade.All();
-            HasMany(x => x.Templates).Cascade.All();
+            HasMany(x => x.Templates).KeyColumn(ForeignKeys.UserFK).Cascade.All();
             HasMany(x => x.Distributions).Cascade.All();
         }
     }

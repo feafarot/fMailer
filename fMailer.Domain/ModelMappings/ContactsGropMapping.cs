@@ -14,9 +14,14 @@ namespace fMailer.Domain.ModelMappings
         public ContactsGropMapping()
         {
             Id(x => x.Id);
+
             Map(x => x.Name).Not.Nullable();
             Map(x => x.Description);
+
+            References(x => x.User).Not.Nullable().Cascade.SaveUpdate();
+
             HasManyToMany(x => x.Contacts);
+            HasManyToMany(x => x.Distributions);
         }
     }
 }
