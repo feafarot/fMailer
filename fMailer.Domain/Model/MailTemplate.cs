@@ -6,10 +6,8 @@
 
 namespace fMailer.Domain.Model
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Web.Script.Serialization;
 
     public class MailTemplate : IUnique
     {
@@ -23,6 +21,7 @@ namespace fMailer.Domain.Model
 
         public virtual IList<Distribution> Distributions { get; set; }
 
+        [ScriptIgnore]
         public virtual User User { get; set; }
     }
 }

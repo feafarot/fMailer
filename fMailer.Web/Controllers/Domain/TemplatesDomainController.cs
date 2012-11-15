@@ -34,13 +34,15 @@ namespace fMailer.Web.Controllers.Domain
             if (template.Id < 1)
             {
                 // New Item
-                template.User = User;
-                User.Templates.Add(template);
+                User.AddTemplate(template);
             }
             else
             {
                 // Update Item
-                Repository.Update(template);
+                var temp = Repository.GetById<MailTemplate>(template.Id);
+                temp.Name = template.Name;
+                temp.Text = template.Text;
+                temp.Description = template.Description;                
             }
 
             return Json(template.Id);

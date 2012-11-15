@@ -6,10 +6,8 @@
 
 namespace fMailer.Domain.Model
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Web.Script.Serialization;
 
     public class ContactsGroup : IUnique
     {
@@ -21,7 +19,8 @@ namespace fMailer.Domain.Model
 
         public virtual string Description { get; set; }
 
-        public  virtual User User { get; set; }
+        [ScriptIgnore]
+        public virtual User User { get; set; }
 
         public virtual IList<Distribution> Distributions { get; set; }
     }

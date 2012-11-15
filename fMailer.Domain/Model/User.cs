@@ -40,5 +40,11 @@ namespace fMailer.Domain.Model
         public virtual IList<Session> Sessions { get; set; }
 
         public virtual Settings Settings { get; set; }
+
+        public virtual void AddTemplate(MailTemplate template)
+        {
+            template.User = this;
+            Templates.Add(template);
+        }
     }
 }

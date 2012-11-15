@@ -28,23 +28,17 @@
 
         public virtual void Add<TEntity>(TEntity entity) where TEntity : class
         {
-            BeginTransaction();
             queryEngine.Add(entity);
-            CommitTransaction();
         }
 
         public virtual void Update<TEntity>(TEntity entity) where TEntity : class
         {
-            BeginTransaction();
             queryEngine.Update(entity);
-            CommitTransaction();
         }
 
         public virtual void Delete<TEntity>(TEntity entity) where TEntity : class
         {
-            BeginTransaction();
             queryEngine.Delete(entity);
-            CommitTransaction();
         }
 
         public virtual void DeleteAll<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
@@ -55,14 +49,10 @@
             }
 
             var list = entities.ToList();
-
-            BeginTransaction();
             foreach (var entity in list)
             {
                 queryEngine.Delete(entity);
             }
-
-            CommitTransaction();
         }
 
         public void Transaction(Action transactionAction)

@@ -7,6 +7,7 @@
 namespace fMailer.Domain.Model
 {
     using System.Collections.Generic;
+    using System.Web.Script.Serialization;
 
     public class Distribution : IUnique
     {
@@ -22,6 +23,7 @@ namespace fMailer.Domain.Model
 
         public virtual IList<Contact> FailedDeliveredContancts { get; set; }
 
-        public  virtual User User { get; set; }
+        [ScriptIgnore]
+        public virtual User User { get; set; }
     }
 }

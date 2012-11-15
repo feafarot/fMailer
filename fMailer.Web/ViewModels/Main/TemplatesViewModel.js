@@ -25,17 +25,23 @@ function TemplatesViewModel()
     self.openCreateTemplateModal = function ()
     {
         self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" });
-        self.modalHeader("Add Template");
+        self.modalHeader("Create new template");
+        $("#newTemplateModal").modal({ backdrop: true, keyboard: false });
+    };
+    self.editTemplate = function (template)
+    {
+        self.currentTemplate(template);
+        self.modalHeader("Edit template");
         $("#newTemplateModal").modal({ backdrop: true, keyboard: false });
     };
     self.saveChanges = function ()
     {
         templatesService.call(
             "UpdateTemplate",
-            { template: currentTemplate() },
+            { template: ko.toJSON(currentTemplate) },
             function (response)
             {
-
+                $('#newTemplateModal').modal('toggle')
             });
     };
     self.loadTemplates = function ()
