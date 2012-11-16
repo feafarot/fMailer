@@ -47,5 +47,13 @@ namespace fMailer.Web.Controllers.Domain
 
             return Json(template.Id);
         }
+
+        [HttpPost]
+        public JsonResult DeleteTemplate(MailTemplate template)
+        {
+            var temp = Repository.GetById<MailTemplate>(template.Id);
+            Repository.Delete(temp);
+            return Json(true);
+        }
     }
 }

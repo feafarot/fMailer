@@ -7,25 +7,45 @@
 
 <div id="newTemplateModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newTemplateModalLabel" aria-hidden="true" style=" width:800px; margin-left: -400px;">
     <div class="modal-header">
-        <h3 id="newTemplateodalLabel" data-bind="text: modalHeader"></h3>
+        <h3 id="newTemplateModalLabel" data-bind="text: modalHeader"></h3>
     </div>
     <div class="modal-body" style="max-height: 600px;" data-bind="with: currentTemplate">
-        <input type="text" class="input-block-level" placeholder="Template name" data-bind="value: Name" />
-        <input type="text" class="input-block-level" placeholder="Short description" data-bind="value: Description" />
+        <input type="text" class="input-block-level" placeholder="Template name" data-bind="value: Name" required maxlength="250" />
+        <input type="text" class="input-block-level" placeholder="Short description" data-bind="value: Description" maxlength="250" />
         <textarea id="wysiwyg" class="input-block-level" style="height: 400px" data-bind="value: Text"></textarea>
     </div>
     <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button class="btn btn-info" data-bind="click: saveChanges">Save</button>
+        <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
+            <div class="bar" style="width: 100%;"></div>
+        </div>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="enable: !isBusy()">Cancel</button>
+        <button class="btn btn-info" data-bind="click: saveChanges, enable: !isBusy()">Save</button>
+    </div>
+</div>
+
+<div id="confirmationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="confirmationModalLabel">Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            Are you sure you want to delete the template "<span data-bind="text: deleteCandidateName()" style="color: #0088CC"></span>"?
+        </p>
+    </div>
+    <div class="modal-footer">
+        <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
+            <div class="bar" style="width: 100%;"></div>
+        </div>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="click: cancelDelete, enable: !isBusy()">Cancel</button>
+        <button class="btn btn-danger" data-bind="click: confirmDelete, enable: !isBusy()">Delete</button>
     </div>
 </div>
 
 <div class="page-header">
-    <h1 class="large"><img alt="Templates" src="@Url.Content("~/Content/Images/Mail write.png")" /> \ Templates</h1>
+    <h1 class="large"><img alt="Templates" src="@Url.Content("~/Content/Images/Mail write.png")" /> Templates</h1>
 </div>
 <div class="row-fluid">
     <button class="btn btn-primary" title="Create new Template" data-bind="click: openCreateTemplateModal">
-        @*<img alt="Add template" src="@Url.Content("~/Content/Images/Add(C).png")" />*@
         Create new Template
     </button>
     <table class="table table-hover">
@@ -37,7 +57,8 @@
                             <img alt="Add template" src="@Url.Content("~/Content/Images/Mail Write(d).png")" style="margin-top: 30px;" />
                         </div>
                         <div class="span11">
-                            <h3><a href="#" data-bind="text: Name, click: editTemplate"></a></h3>
+                            <h3><a href="#" data-bind="text: Name, click: editTemplate"></a> 
+                            <button class="close" style="float: right;" title="Delete template" data-bind="click: deleteTemplate">x</button></h3>
                             <div data-bind="text: Description"></div>
                         </div>
                     </div>
