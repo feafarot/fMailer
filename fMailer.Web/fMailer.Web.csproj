@@ -16,6 +16,12 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -147,6 +153,7 @@
     <Compile Include="AppStart\WebApiConfig.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\Domain\ContactsDomainController.cs" />
     <Compile Include="Controllers\Domain\TemplatesDomainController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\Domain\AuthDomainController.cs" />
@@ -283,6 +290,7 @@
     <Content Include="Scripts\timers-manager.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ViewModels\Auth\SignInViewModel.js" />
+    <Content Include="ViewModels\Main\ContactsViewModel.js" />
     <Content Include="ViewModels\Main\TemplatesViewModel.js" />
     <Content Include="ViewModels\Main\DistributionsViewModel.js" />
     <Content Include="Web.config">
@@ -323,6 +331,7 @@
     <Content Include="Views\Shared\ErrorModalPartial.cshtml" />
     <Content Include="Views\Shared\NavigationPartial.cshtml" />
     <Content Include="Views\Main\Templates.cshtml" />
+    <Content Include="Views\Main\Contacts.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -352,6 +361,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

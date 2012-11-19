@@ -34,10 +34,5 @@ namespace fMailer.Web.Controllers
         {
             return View();
         }
-
-        public ActionResult ContactGroups()
-        {
-            return View();
-        }
     }
 }

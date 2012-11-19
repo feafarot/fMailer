@@ -14,6 +14,7 @@ namespace fMailer.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.MapRoute(RouteNames.Contacts, "Contacts", new { controller = "Main", action = "Contacts" });
             routes.MapRoute(RouteNames.Templates, "Templates", new { controller = "Main", action = "Templates" });
             routes.MapRoute(RouteNames.Distributions, "Distributions", new { controller = "Main", action = "Distributions" });
             routes.MapRoute(RouteNames.SignOff, "SignOff", new { controller = "Auth", action = "SignOff" });

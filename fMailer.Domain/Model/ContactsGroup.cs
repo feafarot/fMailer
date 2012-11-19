@@ -13,6 +13,7 @@ namespace fMailer.Domain.Model
     {
         public virtual int Id { get; set; }
 
+        [ScriptIgnore]
         public virtual IList<Contact> Contacts { get; set; }
 
         public virtual string Name { get; set; }

@@ -9,10 +9,10 @@
     <div class="modal-header">
         <h3 id="newTemplateModalLabel" data-bind="text: modalHeader"></h3>
     </div>
-    <div class="modal-body" style="max-height: 600px;" data-bind="with: currentTemplate">
+    <div class="modal-body" style="max-height: 500px;" data-bind="with: currentTemplate">
         <input type="text" class="input-block-level" placeholder="Template name" data-bind="value: Name" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="Short description" data-bind="value: Description" maxlength="250" />
-        <textarea id="wysiwyg" class="input-block-level" style="height: 400px" data-bind="value: Text"></textarea>
+        <textarea id="wysiwyg" class="input-block-level" style="height: 300px; overflow-y:scroll;" data-bind="value: Text"></textarea>
     </div>
     <div class="modal-footer">
         <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
@@ -36,8 +36,8 @@
         <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
             <div class="bar" style="width: 100%;"></div>
         </div>
-        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="click: cancelDelete, enable: !isBusy()">Cancel</button>
-        <button class="btn btn-danger" data-bind="click: confirmDelete, enable: !isBusy()">Delete</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="click: cancelDelete, enable: !isBusy()">No</button>
+        <button class="btn btn-danger" data-bind="click: confirmDelete, enable: !isBusy()">Yes, Delete</button>
     </div>
 </div>
 
@@ -57,9 +57,13 @@
                             <img alt="Add template" src="@Url.Content("~/Content/Images/Mail Write(d).png")" style="margin-top: 30px;" />
                         </div>
                         <div class="span11">
-                            <h3><a href="#" data-bind="text: Name, click: editTemplate"></a> 
-                            <button class="close" style="float: right;" title="Delete template" data-bind="click: deleteTemplate">x</button></h3>
-                            <div data-bind="text: Description"></div>
+                        <blockquote>
+                            <p>
+                                <h3><a href="#" data-bind="text: Name, click: editTemplate"></a></h3>
+                                <button class="close" style="float: right;" title="Delete template" data-bind="click: deleteTemplate">x</button>
+                            </p>
+                            <small data-bind="text: Description"></small>
+                        </blockquote>
                         </div>
                     </div>
                 </td>

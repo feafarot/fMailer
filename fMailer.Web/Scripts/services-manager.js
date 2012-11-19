@@ -16,6 +16,11 @@ var templatesService = new function ()
     return extended;
 };
 
+var contactsService = new function () {
+    var extended = $.extend({}, new baseService("ContactsDomain"));
+    return extended;
+};
+
 function baseService(service)
 {
     var serviceName = service;
