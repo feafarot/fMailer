@@ -4,12 +4,37 @@
     ViewBag.CurrentRoute = fMailer.Web.RouteNames.Contacts;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div id="contactsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="contactsModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="contactsModalLabel" data-bind="text: modalHeader">
+        </h3>
+    </div>
+    <div class="modal-body" style="max-height: 500px;" data-bind="with: currentContact">
+        <div class="input-prepend ">
+            <span class="add-on">@@</span>
+            <input class="" style="width: 490px;" id="email" type="text" placeholder="Email">
+        </div>
+        <input type="text" class="input-block-level" placeholder="First name" data-bind="value: FirstName" required maxlength="250" />
+        <input type="text" class="input-block-level" placeholder="Last name" data-bind="value: LastName" required maxlength="250" />
+        <input type="text" class="input-block-level" placeholder="Middle name" data-bind="value: MiddleName" required maxlength="250" />
+    </div>
+    <div class="modal-footer">
+        <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
+            <div class="bar" style="width: 100%;">
+            </div>
+        </div>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="enable: !isBusy()">Cancel</button>
+        <button class="btn btn-info" data-bind="click: saveChanges, enable: !isBusy()">Save</button>
+    </div>
+</div>
 <div class="page-header">
-    <h1 class="large"><img alt="Contacts and Groups" src="@Url.Content("~/Content/Images/User-Message.png")" /> Contacts and Groups</h1>
+    <h1 class="large">
+        <img alt="Contacts and Groups" src="@Url.Content("~/Content/Images/User-Message.png")" />
+        Contacts and Groups
+    </h1>
 </div>
 <div class="row-fluid">
-    <button class="btn btn-primary" title="Create new Template" data-bind="">
+    <button class="btn btn-primary" title="Create new Template" data-bind="click: createNewContact">
         Create new Contact
     </button>
     <table class="table table-hover">
@@ -18,16 +43,25 @@
                 <td>
                     <div class="row-fluid">
                         <div class="span1">
-                            <img alt="Add template" src="@Url.Content("~/Content/Images/Mail Write(d).png")" style="margin-top: 30px;" />
+                            <img alt="Add template" src="@Url.Content("~/Content/Images/User-Message(d).png")" style="margin-top: 30px; width: 24px;" />
                         </div>
                         <div class="span11">
-                            <h3><a href="#" data-bind=""></a> 
-                            <button class="close" style="float: right;" title="Delete template" data-bind="">x</button></h3>
-                            <div data-bind=""></div>
+                            <h4>
+                                <a href="#" data-bind="click: editContact">
+                                    <span data-bind="text: LastName"></span>
+                                    <span data-bind="text: FirstName">
+                                    </span><span data-bind="text: MiddleName"></span>
+                                </a>
+                                <span>::</span>
+                                <span data-bind="text: Email"></span>
+                                <button class="close pull-right" title="Delete template" data-bind="">x</button>
+                            </h4>
+                            <div data-bind="">
+                            </div>
                         </div>
                     </div>
                 </td>
             </tr>
         </tbody>
-    </table>    
+    </table>
 </div>

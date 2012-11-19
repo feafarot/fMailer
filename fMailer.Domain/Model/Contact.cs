@@ -23,6 +23,7 @@ namespace fMailer.Domain.Model
 
         public virtual IList<ContactsGroup> Groups { get; set; }
 
+        [ScriptIgnore]
         public virtual IList<Distribution> Distributions { get; set; }
 
         [ScriptIgnore]

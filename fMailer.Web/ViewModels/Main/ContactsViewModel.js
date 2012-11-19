@@ -21,6 +21,9 @@ function ContactsViewModel()
     };
     var options = { backdrop: "static", keyboard: false };
 
+    self.isBusy = ko.observable(false);
+    self.currentContact = ko.observable({});
+    self.modalHeader = ko.observable("");
     self.contacts = ko.observableArray([]);
     self.loadContacts = function ()
     {
@@ -32,6 +35,14 @@ function ContactsViewModel()
                 ko.mapping.fromJS(response, cmapping, self.contacts);
             });
     };
+    self.saveChanges = function ()
+    {
+    }
+    self.createNewContact = function ()
+    {
+        self.modalHeader("Create new contact");
+        $("#contactsModal").modal(options);
+    }
 
     self.loadContacts();
 }
