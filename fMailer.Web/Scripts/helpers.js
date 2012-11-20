@@ -52,6 +52,34 @@ ko.bindingHandlers.accordion =
     }
 }
 
+// Use like so: data-bind="typeahead: { target: selectedNamespace, source: namespaces }"
+// Thanks  to: http://blogs.msdn.com/b/rebond/archive/2012/07/18/knockout-js-binding-for-bootstrap-typeahead-plugin.aspx
+ko.bindingHandlers.typeahead =
+{
+    init: function (element, valueAccessor)
+    {
+        var binding = this;
+        var elem = $(element);
+        var value = valueAccessor();
+
+        // Setup Bootstrap Typeahead for this element.
+        elem.typeahead(
+        {
+            source: function () { return ko.utils.unwrapObservable(value.source); },
+            onselect: function (val) { value.target(val); }
+        });
+
+        // Set the value of the target when the field is blurred.
+        elem.blur(function () { value.target(elem.val()); });
+    },
+    update: function (element, valueAccessor)
+    {
+        var elem = $(element);
+        var value = valueAccessor();
+        elem.val(value.target());
+    }
+};
+
 ko.bindingHandlers.enterPress = 
 {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel)

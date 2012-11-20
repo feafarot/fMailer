@@ -21,9 +21,17 @@ function ContactsViewModel()
     };
     var options = { backdrop: "static", keyboard: false };
 
+    // Modal part
     self.isBusy = ko.observable(false);
-    self.currentContact = ko.observable({});
+    self.currentContact = ko.observable({ FirstName: "", LastName: "", MiddleName: "", Groups: [] });
+    self.selectedGroup = ko.observable({ Id: null, Name: "" });
+    self.allGroups = ko.observableArray([]);
+    self.contextGroups = ko.observableArray([]);
+    self.selectedGroup = ko.observable(null);
+
     self.modalHeader = ko.observable("");
+    
+    // Main part
     self.contacts = ko.observableArray([]);
     self.loadContacts = function ()
     {
@@ -37,12 +45,17 @@ function ContactsViewModel()
     };
     self.saveChanges = function ()
     {
-    }
+    };
     self.createNewContact = function ()
     {
+        self.currentContact({ FirstName: "", LastName: "", MiddleName: "", Groups: [] });
         self.modalHeader("Create new contact");
         $("#contactsModal").modal(options);
-    }
+    };
+    self.addGroup = function ()
+    {
+
+    };
 
     self.loadContacts();
 }

@@ -9,14 +9,21 @@
         <h3 id="contactsModalLabel" data-bind="text: modalHeader">
         </h3>
     </div>
-    <div class="modal-body" style="max-height: 500px;" data-bind="with: currentContact">
-        <div class="input-prepend ">
-            <span class="add-on">@@</span>
-            <input class="" style="width: 490px;" id="email" type="text" placeholder="Email">
-        </div>
+    <div class="modal-body" style="max-height: 500px;" data-bind="">
+        <!-- ko with: currentContact -->
+        <input type="text" class="input-block-level" placeholder="Email" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="First name" data-bind="value: FirstName" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="Last name" data-bind="value: LastName" required maxlength="250" />
-        <input type="text" class="input-block-level" placeholder="Middle name" data-bind="value: MiddleName" required maxlength="250" />
+        <input type="text" class="input-block-level" placeholder="Middle name" data-bind="value: MiddleName" maxlength="250" />
+        <span>
+            Selected Groups:&nbsp;
+            <span data-bind="foreach: Groups">
+                <span class="label label-info" data-bind="Name"></span>;&nbsp;
+            </span>
+        </span>
+        <!-- /ko -->
+        <input type="text" class="input-block-level" placeholder="Group to add" data-provide="typeahead" 
+               data-bind="typeahead: { target: selectedGroup, sources: contextGroups }, enterPress: addGroup">
     </div>
     <div class="modal-footer">
         <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
