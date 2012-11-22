@@ -179,6 +179,7 @@
     <Compile Include="Core\Session\SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="%40JSense.js" />
     <Content Include="Content\Bootstrap\Css\bootstrap-responsive.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap.css" />
@@ -268,6 +269,9 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <None Include="Scripts\linq-vsdoc.js" />
+    <Content Include="Scripts\linq.js" />
+    <Content Include="Scripts\linq.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\jquery-1.8.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />

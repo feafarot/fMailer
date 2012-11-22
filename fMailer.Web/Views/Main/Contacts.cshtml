@@ -11,19 +11,19 @@
     </div>
     <div class="modal-body" style="max-height: 500px;" data-bind="">
         <!-- ko with: currentContact -->
-        <input type="text" class="input-block-level" placeholder="Email" required maxlength="250" />
+        <input type="text" class="input-block-level" placeholder="Email" data-bind="value: Email" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="First name" data-bind="value: FirstName" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="Last name" data-bind="value: LastName" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="Middle name" data-bind="value: MiddleName" maxlength="250" />
-        <span>
-            Selected Groups:&nbsp;
-            <span data-bind="foreach: Groups">
-                <span class="label label-info" data-bind="Name"></span>;&nbsp;
+        <p style="margin-bottom: 8px;">
+            Groups:&nbsp;@*<span class="label"><a data-title="Help" data-content="For assign contact to group select one and press 'Enter'." href="#">?</a></span>*@
+            <span data-bind="foreach: Groups" >
+                <span class="label label-info">#<span data-bind="text: Name"></span><button class="close close-inlabel" data-bind="click: removeGroup">x</button></span>
             </span>
-        </span>
+        </p>
         <!-- /ko -->
-        <input type="text" class="input-block-level" placeholder="Group to add" data-provide="typeahead" 
-               data-bind="typeahead: { target: selectedGroup, sources: contextGroups }, enterPress: addGroup">
+        <input class="input-block-level" type="text" placeholder="Group to assign"
+                data-bind="typeahead: { target: selectedGroup, source: contextGroups }, enterPress: addGroup">
     </div>
     <div class="modal-footer">
         <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
@@ -56,15 +56,20 @@
                             <h4>
                                 <a href="#" data-bind="click: editContact">
                                     <span data-bind="text: LastName"></span>
-                                    <span data-bind="text: FirstName">
-                                    </span><span data-bind="text: MiddleName"></span>
+                                    <span data-bind="text: FirstName"></span>
+                                    <span data-bind="text: MiddleName"></span>
                                 </a>
-                                <span>::</span>
-                                <span data-bind="text: Email"></span>
+                                <span><strong>\</strong></span>
+                                Email: 
+                                <a  data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>
                                 <button class="close pull-right" title="Delete template" data-bind="">x</button>
                             </h4>
-                            <div data-bind="">
-                            </div>
+                            <p style="margin-bottom: 8px;">
+                                Assigned groups:&nbsp;
+                                <span data-bind="foreach: Groups" >
+                                    <span class="label label-info">#<span data-bind="text: Name"></span></span>
+                                </span>
+                            </p>
                         </div>
                     </div>
                 </td>

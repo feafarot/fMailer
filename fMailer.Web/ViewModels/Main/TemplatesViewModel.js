@@ -25,7 +25,7 @@ function TemplatesViewModel()
     self.modalHeader = ko.observable("");
     self.currentTemplate = ko.observable({ Id: 0, Name: "", Text: "", Description: "" });
     self.templates = ko.observableArray([]);
-    self.isBusy = ko.observable(false);
+    self.isBusy = ko.observable(false);    
     self.openCreateTemplateModal = function ()
     {
         self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" });
@@ -33,7 +33,7 @@ function TemplatesViewModel()
         $("#newTemplateModal").modal(options);
     };
     self.editTemplate = function (template)
-    {
+    {        
         self.currentTemplate(template);
         self.modalHeader("Edit template");
         $("#newTemplateModal").modal(options);
@@ -84,8 +84,9 @@ function TemplatesViewModel()
                 $("#confirmationModal").modal("toggle");
                 self.deleteCandidateName("");
                 self.isBusy(false);
-            });
-        };
+            });        
+    };
+
 
     self.loadTemplates();
 }

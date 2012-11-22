@@ -11,6 +11,12 @@ namespace fMailer.Domain.Model
 
     public class Contact : IUnique
     {
+        public Contact()
+        {
+            Groups = new List<ContactsGroup>();
+            Distributions = new List<Distribution>();
+        }
+
         public virtual int Id { get; set; }
 
         public virtual string FirstName { get; set; }
@@ -27,6 +33,11 @@ namespace fMailer.Domain.Model
         public virtual IList<Distribution> Distributions { get; set; }
 
         [ScriptIgnore]
-        public  virtual User User { get; set; }
+        public virtual User User { get; set; }
+
+        public virtual void AddGroup(ContactsGroup group)
+        {
+            Groups.Add(group);
+        }
     }
 }

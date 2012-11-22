@@ -46,5 +46,17 @@ namespace fMailer.Domain.Model
             template.User = this;
             Templates.Add(template);
         }
+
+        public virtual void AddContact(Contact contact)
+        {
+            contact.User = this;
+            Contacts.Add(contact);
+        }
+
+        public virtual void AddContactsGroup(ContactsGroup group)
+        {
+            group.User = this;
+            ContactsGroups.Add(group);
+        }
     }
 }

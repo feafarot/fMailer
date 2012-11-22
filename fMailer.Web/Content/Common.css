@@ -43,3 +43,12 @@
 {
     font-size: 50px;
 }
+.typeahead.dropdown-menu 
+{
+    z-index: 1055;
+}
+.close.close-inlabel 
+{
+    font-size: 16px;
+    margin: -5px 0px 0px 3px;
+}

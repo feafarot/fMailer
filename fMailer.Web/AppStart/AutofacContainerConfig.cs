@@ -55,7 +55,7 @@ namespace fMailer.Web
         private static ISessionFactory CreateSessionFactory()
         {
             return Fluently.Configure()
-                           .Database(MsSqlConfiguration.MsSql2008.ConnectionString(c => c.FromConnectionStringWithKey("fMailerConnectionString")))
+                           .Database(MsSqlConfiguration.MsSql2008.ShowSql().ConnectionString(c => c.FromConnectionStringWithKey("fMailerConnectionString")))
                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<UserMapping>().Conventions.Add(ForeignKey.EndsWith("Id")))
                            //.ExposeConfiguration(c => new SchemaExport(c).Create(false, true))
                            .ExposeConfiguration(c => new SchemaUpdate(c).Execute(false, true))
