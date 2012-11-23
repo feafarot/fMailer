@@ -93,12 +93,9 @@ function ContactsViewModel()
             self.currentContact().Groups.push(existedInAllGroups);
             self.contextGroups.remove(existedInAllGroups.Name());
         }
-        else
+        else if (existedInCurrentConttact == null)
         {
-            if (existedInCurrentConttact == null)
-            {
-                self.currentContact().Groups.push({ Id: -2, Name: self.selectedGroup() });
-            }
+            self.currentContact().Groups.push({ Id: -2, Name: self.selectedGroup() });
         }
     };
     self.removeGroup = function (group)
