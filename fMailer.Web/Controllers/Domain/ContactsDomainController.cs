@@ -43,7 +43,7 @@ namespace fMailer.Web.Controllers.Domain
                 }
             }
 
-            return Json(true);
+            return Json(true);  
         }
 
         [HttpPost]
@@ -60,14 +60,19 @@ namespace fMailer.Web.Controllers.Domain
 
         private void TryAddGroupToContact(Contact contact, ContactsGroup group)
         {
-            if (!contact.Groups.Contains(group))
+            if (contact.Groups.FirstOrDefault(x => x.Id == group.Id) == null)
             {
                 if (group.Id < 1)
                 {
-                    User.AddContactsGroup(group);                    
+                    group.Id = 0;
+                    User.AddContactsGroup(group);
+                    contact.AddGroup(group);                 
                 }
-
-                contact.AddGroup(group);
+                else
+                {
+                    var realGroup = User.ContactsGroups.First(x => x.Id == group.Id);
+                    contact.AddGroup(realGroup);
+                }
             }
         }
     }
