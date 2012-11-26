@@ -28,7 +28,7 @@ function ContactsViewModel()
     self.allGroups = ko.observableArray([]);
     self.contextGroups = ko.observableArray([""]);
     self.selectedGroup = ko.observable("");
-
+    self.rbcContact = ko.observable({});
     self.modalHeader = ko.observable("");
 
     // Main part
@@ -53,13 +53,14 @@ function ContactsViewModel()
                 ko.mapping.fromJS(response, cmapping, self.allGroups);
             });
     };
-    self.editContact = function (contact)
-    {
-        self.currentContact(contact);
-        self.modalHeader("Edit contact");
-        $("#contactsModal").modal(options);
-    };
 
+    self.cancelEdit = function ()
+    {
+        self.loadContacts();
+        self.loadGroups();
+        self.currentContact(self.rbcContact);
+        $('#contactsModal').modal("toggle");
+    }
     self.saveChanges = function ()
     {
         self.isBusy(true);
@@ -82,11 +83,24 @@ function ContactsViewModel()
         self.modalHeader("Create new contact");
         $("#contactsModal").modal(options);
     };
+    self.editContact = function (contact)
+    {
+        self.currentContact(contact);
+        self.rbcContact(jQuery.extend({}, contact));
+        self.contextGroups(self.allGroups.Select("$.Name()"));
+        for (var i = 0; i < unwrapObs(contact.Groups).length; i++)
+        {
+            self.contextGroups.remove(unwrapObs(contact.Groups)[i].Name());
+        }
+
+        self.modalHeader("Edit contact");
+        $("#contactsModal").modal(options);
+    };
     self.addGroup = function ()
     {
         var existedInAllGroups = self.allGroups.FirstOrDefault(null, "$.Name() === self.selectedGroup()");
         var existedInContextGroups = self.contextGroups.FirstOrDefault(null, "$ === self.selectedGroup()");
-        var existedInCurrentConttact = self.currentContact().Groups.FirstOrDefault(null, "unwrapObs($).Name == self.selectedGroup()");
+        var existedInCurrentConttact = self.currentContact().Groups.FirstOrDefault(null, "unwrapObs($).Name === self.selectedGroup()");
 
         if (existedInAllGroups != null && existedInContextGroups != null)
         {
@@ -95,7 +109,7 @@ function ContactsViewModel()
         }
         else if (existedInCurrentConttact == null)
         {
-            self.currentContact().Groups.push({ Id: -2, Name: self.selectedGroup() });
+            self.currentContact().Groups.push({ Id: 0, Name: self.selectedGroup() });
         }
     };
     self.removeGroup = function (group)
