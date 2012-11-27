@@ -4,6 +4,7 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
+using System;
 using System.Diagnostics;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -17,32 +18,55 @@ namespace fMailer.SqlUtility
     {
         public static void Main(string[] args)
         {
-            System.Console.WriteLine(" Database recreating...");
-            CreateAndWaitForProc("sqlcmd", "-S .\\ -i RecreateDatabase.sql");
-            System.Console.WriteLine(" Database recreated.");
+            Console.WriteLine("-Database recreating");
+            CreateAndWaitForProc("sqlcmd", "-S .\\SQLEXPRESS -i RecreateDatabase.sql");
+            Console.WriteLine("-Database recreated");
+            Console.WriteLine();
 
-            System.Console.WriteLine(" Creating fMailer schema... ");
+            System.Console.WriteLine("-Creating fMailer schema");
             var sessionFactory = Fluently.Configure()
                                          .Database(MsSqlConfiguration.MsSql2008.ShowSql().ConnectionString(c => c.FromConnectionStringWithKey("fMailerConnectionString")))
                                          .Mappings(m => m.FluentMappings.AddFromAssemblyOf<UserMapping>().Conventions.Add(ForeignKey.EndsWith("Id")))
                                          .ExposeConfiguration(c => new SchemaUpdate(c).Execute(false, true))
-                                         .BuildSessionFactory();
+                                         .BuildSessionFactory();            
             sessionFactory.OpenSession();
-            System.Console.WriteLine(" Schema created successfully. ");
-
-            System.Console.WriteLine(" Filling DB with default values...");
-            CreateAndWaitForProc("sqlcmd", "-S .\\ -i Defaults.sql");            
-            System.Console.WriteLine(" All operations completed successfully.");
-            System.Console.WriteLine();
+            Console.WriteLine("-Schema created successfully.");
+            Console.WriteLine();         
+            Console.WriteLine("-Filling DB with default values...");
+            CreateAndWaitForProc("sqlcmd", "-S .\\SQLEXPRESS -i Defaults.sql");            
+            Console.WriteLine("-All operations completed.");
+            Console.WriteLine();
         }
 
         private static void CreateAndWaitForProc(string cmd, string args)
-        {
-            var proc = new Process();
-            proc.StartInfo = new ProcessStartInfo(cmd, args);
-            proc.StartInfo.CreateNoWindow = true;
-            proc.Start();
-            proc.WaitForExit();
+        {            
+            var info = new ProcessStartInfo(cmd, args);
+            info.CreateNoWindow = true;
+            info.RedirectStandardOutput = true;
+            info.RedirectStandardError = true;
+            info.UseShellExecute = false;
+            info.ErrorDialog = false;
+            info.WindowStyle = ProcessWindowStyle.Hidden;
+
+            using (var process = Process.Start(info))
+            {
+                process.BeginOutputReadLine();
+                process.OutputDataReceived += (o, e) => 
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        Console.WriteLine(" {0}", e.Data);
+                    }
+                };
+                process.ErrorDataReceived += (o, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        Console.WriteLine(" {0}", e.Data);
+                    }
+                };
+                process.WaitForExit();
+            }
         }
     }
 }

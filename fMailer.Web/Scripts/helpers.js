@@ -31,58 +31,52 @@ function _(property)
     }
 }
 
-ko.bindingHandlers.accordion =
-{
-    init: function (element, valueAccessor)
-    {
-        var options = valueAccessor() || {};
-        setTimeout(
-            function ()
-            {
-                $(element).accordion(options);
-            },
-            0);
-
-        ko.utils.domNodeDisposal.addDisposeCallback(
-            element,
-            function ()
-            {
-                $(element).accordion("destroy");
-            });
-    },
-    update: function (element, valueAccessor)
-    {
-        var options = valueAccessor() || {};
-        $(element).accordion("destroy").accordion(options);
-    }
-}
-
 ko.observableArray.fn.Where = function (predicate)
 {
     return Enumerable.From(this())
            .Where(predicate)
            .ToArray();
 };
-
 ko.observableArray.fn.Select = function (predicate)
 {
     return Enumerable.From(this())
            .Select(predicate)
            .ToArray();
 };
-
 ko.observableArray.fn.First = function (predicate)
 {
     return Enumerable.From(this())
            .First(predicate);
 };
-
-
 ko.observableArray.fn.FirstOrDefault = function (def, predicate)
 {
     return Enumerable.From(this())
            .FirstOrDefault(def, predicate);
 };
+
+ko.observable.fn.track = function ()
+{
+    var cache = ko.observable(this()),
+        self = this;
+
+    this.commit = function ()
+    {
+        cache(self());
+    };
+    this.cancel = function ()
+    {
+        self(cache());
+    };
+    this.hasChanges = ko.computed(function ()
+    {
+        return self() !== cache();
+    });
+    return this;
+};
+//ko.fn.trackedObservable = function (val)
+//{
+//    return ko.observable(val).track();
+//};
 
 // Use like so: data-bind="typeahead: { target: selectedNamespace, source: namespaces }"
 // Thanks  to: http://blogs.msdn.com/b/rebond/archive/2012/07/18/knockout-js-binding-for-bootstrap-typeahead-plugin.aspx

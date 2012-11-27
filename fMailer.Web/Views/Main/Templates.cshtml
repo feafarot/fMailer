@@ -18,7 +18,7 @@
         <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
             <div class="bar" style="width: 100%;"></div>
         </div>
-        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="enable: !isBusy()">Cancel</button>
+        <button class="btn" aria-hidden="true" data-bind="click: cancelChanges, enable: !isBusy()">Cancel</button>
         <button class="btn btn-info" data-bind="click: saveChanges, enable: !isBusy()">Save</button>
     </div>
 </div>

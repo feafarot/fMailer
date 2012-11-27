@@ -1,4 +1,4 @@
-USE fMailer;
+USE [fMailer]
 
 INSERT INTO [Settings] ([Signature])
 VALUES ('Simple signature!');

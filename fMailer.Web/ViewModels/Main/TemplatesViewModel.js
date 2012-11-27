@@ -11,11 +11,7 @@ function TemplatesViewModel()
     var mapping = {
         key: function (template)
         {
-            if (template != null)
-            {
-                return template.Id;
-            }
-
+            if (template != null) { return template.Id; }
             return -1;
         }
     };
@@ -23,23 +19,25 @@ function TemplatesViewModel()
     self.deleteCandidate = null;
     self.deleteCandidateName = ko.observable("");
     self.modalHeader = ko.observable("");
-    self.currentTemplate = ko.observable({ Id: 0, Name: "", Text: "", Description: "" });
+    self.currentTemplate = ko.observable({ Id: 0, Name: "", Text: "", Description: "" }).track();
     self.templates = ko.observableArray([]);
-    self.isBusy = ko.observable(false);    
+    self.isBusy = ko.observable(false);
+
     self.openCreateTemplateModal = function ()
     {
-        self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" });
+        self.currentTemplate = self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" }).track();
         self.modalHeader("Create new template");
         $("#newTemplateModal").modal(options);
     };
     self.editTemplate = function (template)
     {        
-        self.currentTemplate(template);
+        self.currentTemplate = template.track();
         self.modalHeader("Edit template");
         $("#newTemplateModal").modal(options);
     };
     self.saveChanges = function ()
     {
+        self.currentTemplate.commit();
         self.isBusy(true);
         templatesService.call(
             "UpdateTemplate",
@@ -50,6 +48,11 @@ function TemplatesViewModel()
                 $('#newTemplateModal').modal("toggle")
                 self.isBusy(false);
             });
+    };
+    self.cancelChanges = function ()
+    {
+        self.currentTemplate.cancel();
+        $('#newTemplateModal').modal("toggle")        
     };
     self.loadTemplates = function ()
     {
