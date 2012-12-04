@@ -4,6 +4,11 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
+function trackable(item)
+{
+
+}
+
 function unwrapObs(observable)
 {
     return ko.utils.unwrapObservable(observable);

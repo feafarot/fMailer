@@ -25,13 +25,13 @@ function TemplatesViewModel()
 
     self.openCreateTemplateModal = function ()
     {
-        self.currentTemplate = self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" }).track();
+        self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" });
         self.modalHeader("Create new template");
         $("#newTemplateModal").modal(options);
     };
     self.editTemplate = function (template)
     {        
-        self.currentTemplate = template.track();
+        self.currentTemplate(template);
         self.modalHeader("Edit template");
         $("#newTemplateModal").modal(options);
     };
