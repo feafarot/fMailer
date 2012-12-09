@@ -16,6 +16,19 @@ namespace fMailer.Domain.ModelMappings
             Id(x => x.Id);
 
             Map(x => x.Signature);
+            Map(x => x.EmailAddressFrom);
+            Map(x => x.Username);
+            Map(x => x.Password);
+
+            Map(x => x.Pop3Address);
+            Map(x => x.Pop3Prot);
+            Map(x => x.Pop3UseSsl);
+
+            Map(x => x.SmtpAddress);
+            Map(x => x.SmtpSslPort);
+            Map(x => x.SmtpTlsPort);
+            Map(x => x.SmtpUseAuth);
+            Map(x => x.SmtpUseSsl);
         }
     }
 }

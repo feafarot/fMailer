@@ -1,0 +1,128 @@
+﻿@model fMailer.Domain.Model.Settings
+
+@{
+    ViewBag.Title = "Settings";
+    ViewBag.CurrentRoute = fMailer.Web.RouteNames.Settings;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1 class="large"><img alt="Settings" src="@Url.Content("~/Content/Images/Settings.png")" /> Settings</h1>
+</div>
+
+@using (Html.BeginForm("Settings", "Main", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+
+    <fieldset>
+        <legend>Common</legend>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Signature, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Signature)
+                @Html.ValidationMessageFor(model => model.Signature)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.EmailAddressFrom, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.EmailAddressFrom)
+                @Html.ValidationMessageFor(model => model.EmailAddressFrom)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Username)
+                @Html.ValidationMessageFor(model => model.Username)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>SMTP</legend>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.SmtpAddress, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.SmtpAddress)
+                @Html.ValidationMessageFor(model => model.SmtpAddress)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.SmtpUseAuth, new { @class = "control-label" })
+            <div class="controls">
+                @Html.CheckBoxFor(model => model.SmtpUseAuth)
+                @Html.ValidationMessageFor(model => model.SmtpUseAuth)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.SmtpUseSsl, new { @class = "control-label" })
+            <div class="controls">
+                @Html.CheckBoxFor(model => model.SmtpUseSsl)
+                @Html.ValidationMessageFor(model => model.SmtpUseSsl)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.SmtpTlsPort, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.SmtpTlsPort)
+                @Html.ValidationMessageFor(model => model.SmtpTlsPort)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.SmtpSslPort, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.SmtpSslPort)
+                @Html.ValidationMessageFor(model => model.SmtpSslPort)
+            </div>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>POP3</legend>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Pop3Address, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Pop3Address)
+                @Html.ValidationMessageFor(model => model.Pop3Address)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Pop3Prot, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Pop3Prot)
+                @Html.ValidationMessageFor(model => model.Pop3Prot)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.Pop3UseSsl, new { @class = "control-label" })
+            <div class="controls">
+                @Html.CheckBoxFor(model => model.Pop3UseSsl)
+                @Html.ValidationMessageFor(model => model.Pop3UseSsl)
+            </div>
+        </div>
+    </fieldset>
+
+    <p>
+        <input class="btn btn-info" type="submit" value="Save" />
+    </p>
+}

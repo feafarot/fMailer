@@ -24,7 +24,8 @@ namespace fMailer.Web.Core.NonDomainModels
                 {
                     new NavigationItem(RouteNames.Distributions, "Distributions", "~/Content/Images/Mail Out.png"),
                     new NavigationItem(RouteNames.Templates, "Templates", "~/Content/Images/Mail write.png"),
-                    new NavigationItem(RouteNames.Contacts, "Contacts and Groups", "~/Content/Images/User-Message.png")
+                    new NavigationItem(RouteNames.Contacts, "Contacts and Groups", "~/Content/Images/User-Message.png"),
+                    new NavigationItem(RouteNames.Settings, "Settings", "~/Content/Images/Settings.png")
                 };
             }
         }

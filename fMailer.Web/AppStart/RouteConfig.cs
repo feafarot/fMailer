@@ -19,6 +19,8 @@ namespace fMailer.Web
             routes.MapRoute(RouteNames.Distributions, "Distributions", new { controller = "Main", action = "Distributions" });
             routes.MapRoute(RouteNames.SignOff, "SignOff", new { controller = "Auth", action = "SignOff" });
             routes.MapRoute(RouteNames.SignIn, "SignIn", new { controller = "Auth", action = "SignIn" });
+            routes.MapRoute(RouteNames.Settings, "Settings", new { controller = "Main", action = "Settings" });
+
             routes.MapRoute("Base", "{controller}/{action}/{id}", new { controller = "Main", action = "Distributions", id = UrlParameter.Optional });
             routes.MapRoute(RouteNames.Default, "Distributions", new { controller = "Main", action = "Distributions" });
         }

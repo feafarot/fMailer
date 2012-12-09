@@ -59,10 +59,47 @@
     <Reference Include="FluentNHibernate">
       <HintPath>..\packages\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="HigLabo.Data">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Mail">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.Dropbox">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.Dropbox.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.Facebook">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.Ftp">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.Rss">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.Rss.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.SugarSync">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.SugarSync.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.Twitter">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.Net.WindowsLive">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.Net.WindowsLive.dll</HintPath>
+    </Reference>
+    <Reference Include="HigLabo.WindowsAzure.RestService">
+      <HintPath>..\packages\HigLabo.1.6.1.0\lib\net40\HigLabo.WindowsAzure.RestService.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.2.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
@@ -91,9 +128,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <Private>True</Private>
@@ -313,10 +347,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Main\Settings.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dto\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

@@ -19,5 +19,7 @@ namespace fMailer.Web
         public const string Templates = "Templates";
 
         public const string Contacts = "Contacts";
+
+        public const string Settings = "Settings";
     }
 }
