@@ -29,7 +29,7 @@ namespace fMailer.Web.Controllers.Domain
             if (contact.Id < 1)
             {
                 contact.Id = 0;
-                UpdateGroups(contact);
+                UpdateGroups(ref contact);
                 User.AddContact(contact);
             }
             else
@@ -39,6 +39,7 @@ namespace fMailer.Web.Controllers.Domain
                 realContact.FirstName = contact.FirstName;
                 realContact.LastName = contact.LastName;
                 realContact.MiddleName = contact.MiddleName;
+                realContact.Groups.Clear();
                 foreach (var item in contact.Groups)
                 {
                     TryAddGroupToContact(realContact, item);
@@ -78,7 +79,7 @@ namespace fMailer.Web.Controllers.Domain
             }
         }
 
-        private void UpdateGroups(Contact contact)
+        private void UpdateGroups(ref Contact contact)
         {
             if (contact.Groups == null)
             {
@@ -91,6 +92,11 @@ namespace fMailer.Web.Controllers.Domain
                 if (id > 0)
                 {
                     contact.Groups[i] = Repository.GetById<ContactsGroup>(id);
+                }
+                else
+                {
+                    contact.Groups[i].Id = 0;
+                    User.AddContactsGroup(contact.Groups[i]);
                 }
             }
         }
