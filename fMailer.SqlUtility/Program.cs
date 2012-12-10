@@ -19,7 +19,7 @@ namespace fMailer.SqlUtility
         public static void Main(string[] args)
         {
             Console.WriteLine("-Database recreating");
-            CreateAndWaitForProc("sqlcmd", "-S .\\SQLEXPRESS -i RecreateDatabase.sql");
+            CreateAndWaitForProc("sqlcmd", "-S .\\SQLExpress -i RecreateDatabase.sql");
             Console.WriteLine("-Database recreated");
             Console.WriteLine();
 
@@ -33,7 +33,7 @@ namespace fMailer.SqlUtility
             Console.WriteLine("-Schema created successfully.");
             Console.WriteLine();         
             Console.WriteLine("-Filling DB with default values...");
-            CreateAndWaitForProc("sqlcmd", "-S .\\SQLEXPRESS -i Defaults.sql");            
+            CreateAndWaitForProc("sqlcmd", "-S .\\SQLExpress -i Defaults.sql");            
             Console.WriteLine("-All operations completed.");
             Console.WriteLine();
         }

@@ -1,7 +1,31 @@
 USE [fMailer]
 
-INSERT INTO [Settings] ([Signature])
-VALUES ('Simple signature!');
+INSERT INTO[Settings]
+           ([Signature]
+           ,[EmailAddressFrom]
+           ,[Username]
+           ,[Password]
+           ,[Pop3Address]
+           ,[Pop3Prot]
+           ,[Pop3UseSsl]
+           ,[SmtpAddress]
+           ,[SmtpSslPort]
+           ,[SmtpTlsPort]
+           ,[SmtpUseAuth]
+           ,[SmtpUseSsl])
+     VALUES
+           ('Simple signature, just for test!'
+           ,'sly.feafarot@gmail.com'
+           ,'sly.feafarot@gmail.com'
+           ,''
+           ,'pop.gmail.com'
+           ,995
+           ,1
+           ,'smtp.gmail.com'
+           ,465
+           ,587
+           ,1
+           ,1)
 INSERT INTO [User] ([Id], [Login], [Password], [Email])
 VALUES (1, 'admin', 'root', 'sly.feafarot@gmail.com');
 
