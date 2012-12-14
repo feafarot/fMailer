@@ -31,6 +31,9 @@ function ContactsViewModel()
     self.rbcContact = ko.observable({});
     self.modalHeader = ko.observable("");
 
+    self.deleteCandidate = null;
+    self.deleteCandidateName = ko.observable("");
+
     // Main part
     self.contacts = ko.observableArray([]);
     self.loadContacts = function ()
@@ -39,7 +42,7 @@ function ContactsViewModel()
             "LoadContacts",
             null,
             function (response)
-            {
+            {                
                 ko.mapping.fromJS(response, cmapping, self.contacts);
             });
     };
@@ -115,7 +118,33 @@ function ContactsViewModel()
     self.removeGroup = function (group)
     {
         self.currentContact().Groups.remove(group);
-        self.contextGroups.push(unwrapObs(group).Name);
+        self.contextGroups.push(unwrapObs(group.Name));
+    };
+
+    self.deleteContact = function (contact)
+    {
+        self.deleteCandidate = contact;
+        self.deleteCandidateName(unwrapObs(contact.LastName) + " " + unwrapObs(contact.FirstName) + " " + unwrapObs(contact.MiddleName));
+        $("#confirmationModal").modal(options);
+    };
+    self.cancelDelete = function ()
+    {
+        self.deleteCandidate = null;
+        self.deleteCandidateName("");
+    };
+    self.confirmDelete = function ()
+    {
+        self.isBusy(true);
+        templatesService.call(
+            "DeleteTemplate",
+            { template: ko.toJSON(self.deleteCandidate) },
+            function (response)
+            {
+                self.loadTemplates();
+                $("#confirmationModal").modal("toggle");
+                self.deleteCandidateName("");
+                self.isBusy(false);
+            });
     };
 
     self.loadContacts();

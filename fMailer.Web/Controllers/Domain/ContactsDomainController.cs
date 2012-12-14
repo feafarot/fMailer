@@ -50,6 +50,14 @@ namespace fMailer.Web.Controllers.Domain
         }
 
         [HttpPost]
+        public JsonResult DeleteContact(Contact contact)
+        {
+            var temp = Repository.GetById<Contact>(contact.Id);
+            Repository.Delete(temp);
+            return Json(true);
+        }
+
+        [HttpPost]
         public JsonResult LoadContacts()
         {
             return Json(User.Contacts);

@@ -4,6 +4,7 @@
     ViewBag.CurrentRoute = fMailer.Web.RouteNames.Contacts;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div id="contactsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="contactsModalLabel" aria-hidden="true">
     <div class="modal-header">
         <h3 id="contactsModalLabel" data-bind="text: modalHeader">
@@ -17,6 +18,7 @@
         <input type="text" class="input-block-level" placeholder="Middle name" data-bind="value: MiddleName" maxlength="250" />
         <p style="margin-bottom: 8px;">
             Groups:&nbsp;@*<span class="label"><a data-title="Help" data-content="For assign contact to group select one and press 'Enter'." href="#">?</a></span>*@
+            <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
             <span data-bind="foreach: Groups" >
                 <span class="label label-info">#<span data-bind="text: Name"></span><button class="close close-inlabel" data-bind="click: removeGroup">x</button></span>
             </span>
@@ -34,6 +36,25 @@
         <button class="btn btn-info" data-bind="click: saveChanges, enable: !isBusy()">Save</button>
     </div>
 </div>
+
+<div id="confirmationModal" class="modal hide fade" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="confirmationModalLabel">Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            Are you sure you want to delete the contact "<span data-bind="text: deleteCandidateName()" style="color: #0088CC"></span>"?
+        </p>
+    </div>
+    <div class="modal-footer">
+        <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
+            <div class="bar" style="width: 100%;"></div>
+        </div>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="click: cancelDelete, enable: !isBusy()">No</button>
+        <button class="btn btn-danger" data-bind="click: confirmDelete, enable: !isBusy()">Yes, Delete</button>
+    </div>
+</div>
+
 <div class="page-header">
     <h1 class="large">
         <img alt="Contacts and Groups" src="@Url.Content("~/Content/Images/User-Message.png")" />
@@ -50,7 +71,7 @@
                 <td>
                     <div class="row-fluid">
                         <div class="span1 hidden-phone">
-                            <img alt="Add template" src="@Url.Content("~/Content/Images/User-Message(d).png")" style="margin-top: 30px; width: 24px;" />
+                            <img alt="Add template" src="@Url.Content("~/Content/Images/User-Message(d).png")" style="margin-top: 10px;" />
                         </div>
                         <div class="span11">
                             <h4>
@@ -61,11 +82,12 @@
                                 </a>
                                 <span><strong>\</strong></span>
                                 Email: 
-                                <a  data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>
-                                <button class="close pull-right" title="Delete template" data-bind="">x</button>
+                                <a data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>
+                                <button class="close pull-right" title="Delete template" data-bind="click: deleteContact">x</button>
                             </h4>
                             <p style="margin-bottom: 8px;">
                                 Assigned groups:&nbsp;
+                                <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
                                 <span data-bind="foreach: Groups" >
                                     <span class="label label-info">#<span data-bind="text: Name"></span></span>
                                 </span>

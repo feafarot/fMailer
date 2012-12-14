@@ -30,16 +30,17 @@
             min-height: 100%;
             height: auto !important;
             height: 100%;
-            margin: 0 auto -25px;
+            margin: 0 auto -30px;
         }
         #push,
         #footer 
         {
-            height: 25px;
+            height: 30px;
         }
         #footer 
         {
-            background-color: #f5f5f5;
+            background-color: #1B1B1B;
+            vertical-align: middle;
         }
 
         @@media (max-width: 767px) 
@@ -52,26 +53,12 @@
                 padding-right: 20px;
             }
         }
-        
-        /*.container
-        {
-            margin: 30px 123px 0px 100px;
-        }*/
-
-        /*@@media (max-width: 1024px) {
-            .container
-            {
-                margin: 0px 5px 0px 100px;
-            }
-        }*/
-
     </style>
 </head>
 <body>
     @Html.Partial("ErrorModalPartial")
     <div id="wrap">
         @Html.Partial("NavigationPartial", new NavigationModel { SelectedRouteName = ViewBag.CurrentRoute, Request = Request })
-        <div style="height: 60px;"><!-- Layout helper --></div>
 
         <div class="container">
             @RenderBody()
@@ -81,8 +68,12 @@
         </div>
     </div>
     <footer id="footer">
-        <p style="float: right" class="muted credit">
-            Copyright © 2012 <a href="https://github.com/feafarot">feafarot</a> | version: @typeof(fMailer.Web.RouteNames).Assembly.GetName().Version.ToString() &nbsp;
+        <p style="float: right; margin: 5px 0;" class="muted credit">
+           <span style="color: #0088CC">f</span>Mailer
+           <span style="color: #111111;">|</span>
+           Copyright © 2012 <a href="https://github.com/feafarot" target="_blank">feafarot</a>
+           <span style="color: #111111;">|</span>
+           version: @typeof(fMailer.Web.RouteNames).Assembly.GetName().Version.ToString() &nbsp;
         </p>
     </footer>
 

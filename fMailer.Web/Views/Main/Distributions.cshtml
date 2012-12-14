@@ -8,3 +8,29 @@
 <div class="page-header">
      <h1 class="large"><img alt="Distributions" src="@Url.Content("~/Content/Images/Mail Out.png")" /> Distributions</h1>
 </div>
+
+<div class="row-fluid">
+    [TOOLBAR]
+    <table class="table table-hover">
+        <tbody data-bind="">
+            <tr>
+                <td>
+                    <div class="row-fluid">
+                        <div class="span1 hidden-phone">
+                        </div>
+                        <div class="span11">
+                            <div>
+                                To Groups:&nbsp;
+                                <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
+                                <span data-bind="foreach: Groups" >
+                                    <span class="label label-info">#<span data-bind="text: Name"></span></span>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

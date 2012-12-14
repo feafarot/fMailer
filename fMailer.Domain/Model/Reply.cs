@@ -22,5 +22,7 @@ namespace fMailer.Domain.Model
         public virtual string EmailText { get; set; }
 
         public virtual Distribution Distribution { get; set; }
+
+        public virtual bool IsNew { get; set; }
     }
 }
