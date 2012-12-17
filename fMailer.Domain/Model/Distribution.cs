@@ -13,6 +13,8 @@ namespace fMailer.Domain.Model
     {
         public virtual int Id { get; set; }
 
+        public virtual string Name { get; set; }
+
         public virtual IList<Reply> Replies { get; set; }
 
         public virtual MailTemplate Template { get; set; }

@@ -6,11 +6,44 @@
 }
 
 <div class="page-header">
-     <h1 class="large"><img alt="Distributions" src="@Url.Content("~/Content/Images/Mail Out.png")" /> Distributions</h1>
+    <h1 class="large">
+        <img alt="Distributions" src="@Url.Content("~/Content/Images/Mail Out.png")" /> Distributions
+    </h1>
 </div>
 
 <div class="row-fluid">
     [TOOLBAR]
+    <div class="accordion" id="accordion" data-bind="">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <div class="row-fluid">
+                    <div class="span1 hidden-phone">[ICON]</div>
+                    <div class="span11">
+                        <h3><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-bind="text: Name, attr: { href: 'did' + Id}">Name of distr</a></h3>
+                        <div>
+                            To Groups:&nbsp;
+                            <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
+                            <span data-bind="foreach: Groups">
+                                <span class="label label-info">#<span data-bind="text: Name"></span></span>
+                            </span>
+                        </div>
+                        <div>
+                            To Contacts:&nbsp;
+                            <span data-bind="visible: Contacts().length < 1" class="muted">No groups</span>
+                            <span data-bind="foreach: Contacts">
+                                <a data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>;
+                            </span>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div class="accordion-body collapse in" data-bind="attr: { id: 'did' + Id}">
+                <div class="accordion-inner">
+                    [REPLIES]
+                </div>
+            </div>
+        </div>
+    </div>
     <table class="table table-hover">
         <tbody data-bind="">
             <tr>
@@ -22,7 +55,7 @@
                             <div>
                                 To Groups:&nbsp;
                                 <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
-                                <span data-bind="foreach: Groups" >
+                                <span data-bind="foreach: Groups">
                                     <span class="label label-info">#<span data-bind="text: Name"></span></span>
                                 </span>
 
