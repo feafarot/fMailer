@@ -93,7 +93,7 @@ ko.bindingHandlers.typeahead =
         var value = valueAccessor();
 
         this.self = this;
-        self.elem = $(element);
+        self.elem = $("#" + element.id);
 
         // Setup Bootstrap Typeahead for this element.
         self.elem.typeahead(
@@ -127,7 +127,7 @@ ko.bindingHandlers.typeahead =
     },
     update: function (element, valueAccessor)
     {
-        var elem = $(element);
+        var elem = $("#" + element.id);
         var value = valueAccessor();
         elem.val(value.target());
     }

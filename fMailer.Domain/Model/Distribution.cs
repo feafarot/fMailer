@@ -21,7 +21,7 @@ namespace fMailer.Domain.Model
 
         public virtual IList<Contact> Contacts { get; set; }
 
-        public virtual IList<ContactsGroup> ContactsGroups { get; set; }
+        public virtual IList<ContactsGroup> Groups { get; set; }
 
         public virtual IList<Contact> FailedDeliveredContancts { get; set; }
 

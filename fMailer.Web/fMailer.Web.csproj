@@ -191,6 +191,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Domain\ContactsDomainController.cs" />
+    <Compile Include="Controllers\Domain\DistributionsDomainController.cs" />
     <Compile Include="Controllers\Domain\TemplatesDomainController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\Domain\AuthDomainController.cs" />

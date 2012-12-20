@@ -21,6 +21,12 @@ var contactsService = new function () {
     return extended;
 };
 
+var distributionsService = new function ()
+{
+    var extended = $.extend({}, new baseService("DistributionsDomain"));
+    return extended;
+};
+
 function baseService(service)
 {
     var serviceName = service;

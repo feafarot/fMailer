@@ -5,15 +5,60 @@
     Layout = "~/Views/Shared/_Layout.cshtml";    
 }
 
+<div id="distrModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="contactsModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="contactsModalLabel">
+            New Distribution
+        </h3>
+    </div>
+    <div class="modal-body" style="max-height: 500px;">
+        <!-- ko with: currentDistr -->
+        <input type="text" class="input-block-level" placeholder="Name" data-bind="value: Name" required maxlength="250" />
+        <p style="margin-bottom: 8px;">
+            <span data-bind="visible: Contacts().length < 1" class="muted">No contacts</span>
+            <span data-bind="foreach: Contacts" >
+                <span class="label label-info">#<span data-bind="text: Email"></span><button class="close close-inlabel" data-bind="click: removeContact">x</button></span>
+            </span>
+        </p>
+        <!-- /ko -->
+        <form>
+        <input class="input-block-level" type="text" placeholder="Contacts to assign" id="contactsTpa"
+               data-bind="typeahead: { target: selectedContact, source: contextContacts }, enterPress: addContact">
+        </form>
+        <!-- ko with: currentDistr -->
+        <p style="margin-bottom: 8px;">
+            <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
+            <span data-bind="foreach: Groups" >
+                <span class="label label-info">#<span data-bind="text: Name"></span><button class="close close-inlabel" data-bind="click: removeGroup">x</button></span>
+            </span>
+        </p>
+        <!-- /ko -->
+        <input class="input-block-level" type="text" placeholder="Group to assign" id="groupsTpa"
+               data-bind="typeahead: { target: selectedGroup, source: contextGroups }, enterPress: addGroup">
+    </div>
+    <div class="modal-footer">
+        <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
+            <div class="bar" style="width: 100%;">
+            </div>
+        </div>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" data-bind="enable: !isBusy()">Cancel</button>
+        <button class="btn btn-info" data-bind="click: submitDistr, enable: !isBusy()">Save</button>
+    </div>
+</div>
+
 <div class="page-header">
     <h1 class="large">
         <img alt="Distributions" src="@Url.Content("~/Content/Images/Mail Out.png")" /> Distributions
     </h1>
 </div>
 
+<button class="btn btn-primary" title="Create new Distribution" data-bind="click: createDistr">
+    Create new Distribution
+</button>
+
 <div class="row-fluid">
     [TOOLBAR]
-    <div class="accordion" id="accordion" data-bind="">
+    <div class="accordion" id="accordion" data-bind="foreach: distrs">
         <div class="accordion-group">
             <div class="accordion-heading">
                 <div class="row-fluid">
@@ -29,13 +74,13 @@
                         </div>
                         <div>
                             To Contacts:&nbsp;
-                            <span data-bind="visible: Contacts().length < 1" class="muted">No groups</span>
+                            <span data-bind="visible: Contacts().length < 1" class="muted">No contacts</span>
                             <span data-bind="foreach: Contacts">
                                 <a data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>;
                             </span>
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
             <div class="accordion-body collapse in" data-bind="attr: { id: 'did' + Id}">
                 <div class="accordion-inner">
@@ -44,26 +89,4 @@
             </div>
         </div>
     </div>
-    <table class="table table-hover">
-        <tbody data-bind="">
-            <tr>
-                <td>
-                    <div class="row-fluid">
-                        <div class="span1 hidden-phone">
-                        </div>
-                        <div class="span11">
-                            <div>
-                                To Groups:&nbsp;
-                                <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
-                                <span data-bind="foreach: Groups">
-                                    <span class="label label-info">#<span data-bind="text: Name"></span></span>
-                                </span>
-
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 </div>
