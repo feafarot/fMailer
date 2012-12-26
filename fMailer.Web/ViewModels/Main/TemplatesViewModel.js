@@ -19,13 +19,13 @@ function TemplatesViewModel()
     self.deleteCandidate = null;
     self.deleteCandidateName = ko.observable("");
     self.modalHeader = ko.observable("");
-    self.currentTemplate = ko.observable({ Id: 0, Name: "", Text: "", Description: "" }).track();
+    self.currentTemplate = ko.observable({ Id: 0, Name: "", Text: ko.observable(""), Subject: "" }).track();
     self.templates = ko.observableArray([]);
     self.isBusy = ko.observable(false);
 
     self.openCreateTemplateModal = function ()
     {
-        self.currentTemplate({ Id: 0, Name: "", Text: "", Description: "" });
+        self.currentTemplate({ Id: 0, Name: "", Text: ko.observable(""), Subject: "" });
         self.modalHeader("Create new template");
         $("#newTemplateModal").modal(options);
     };

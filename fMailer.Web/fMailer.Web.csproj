@@ -218,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="%40JSense.js" />
+    <Content Include="Content\bootstrap-wysihtml5-0.0.2.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap-responsive.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap.css" />
@@ -243,6 +244,8 @@
     <Content Include="Content\Images\Shape63.png" />
     <Content Include="Content\Images\Shield user.png" />
     <Content Include="Content\Images\Text Editor.png" />
+    <Content Include="Content\jwysiwyg-bootstrap.css" />
+    <Content Include="Content\themes\base\jquery.wysiwyg.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -271,6 +274,7 @@
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.wysiwyg%28orig%29.css" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -299,11 +303,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap-wysihtml5-0.0.2.js" />
+    <Content Include="Scripts\bootstrap-wysihtml5-0.0.2.min.js" />
     <Content Include="Scripts\helpers.js" />
-    <Content Include="Scripts\jwysiwyg\controls\wysiwyg.image.js" />
-    <Content Include="Scripts\jwysiwyg\controls\wysiwyg.link.js" />
-    <Content Include="Scripts\jwysiwyg\controls\wysiwyg.table.js" />
-    <Content Include="Scripts\jwysiwyg\jquery.wysiwyg.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
@@ -331,6 +333,7 @@
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\services-manager.js" />
     <Content Include="Scripts\timers-manager.js" />
+    <Content Include="Scripts\wysihtml5-0.3.0_rc2.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ViewModels\Auth\SignInViewModel.js" />
     <Content Include="ViewModels\Main\ContactsViewModel.js" />

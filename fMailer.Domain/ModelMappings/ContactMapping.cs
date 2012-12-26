@@ -15,7 +15,7 @@ namespace fMailer.Domain.ModelMappings
         {
             Id(x => x.Id);
 
-            Map(x => x.Email).Not.Nullable();
+            Map(x => x.Email).Not.Nullable().Unique();
             Map(x => x.FirstName).Not.Nullable();
             Map(x => x.LastName).Not.Nullable();
             Map(x => x.MiddleName);

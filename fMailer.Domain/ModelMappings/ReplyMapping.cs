@@ -10,7 +10,7 @@
             Id(x => x.Id);
 
             Map(x => x.RecievedOn).Not.Nullable();
-            Map(x => x.EmailText).Not.Nullable();
+            Map(x => x.EmailText).Not.Nullable().CustomSqlType("nvarchar(MAX)");
             Map(x => x.IsNew).Not.Nullable();
 
             References(x => x.From).Not.Nullable().Cascade.SaveUpdate();

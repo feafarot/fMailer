@@ -20,6 +20,10 @@ function DistributionsViewModel()
     self.currentDistr = ko.observable(self.clearDistr);
     self.isBusy = ko.observable(false);
 
+    self.templates = ko.observableArray([]);
+    self.selectedTemplate = ko.observable("");
+    self.contextTemplates = ko.observableArray([""]);
+
     self.allGroups = ko.observableArray([]);
     self.contextGroups = ko.observableArray([""]);
     self.selectedGroup = ko.observable("");
@@ -63,13 +67,24 @@ function DistributionsViewModel()
     };
     self.submitDistr = function ()
     {
+        self.isBusy(true);
+        self.currentDistr().Template = self.templates.First("$.Name() === self.selectedTemplate()");
+        distributionsService.call(
+            "SubmitDistribution",
+            { distribution: ko.toJSON(self.currentDistr) },
+            function (response)
+            {
+                self.isBusy(false);
+                $("#distrModal").modal("toggle");
+            });
     };
     self.cancelDistr = function ()
     {
     };
 
+
     // Main part
-    self.clearDistr = { Id: 0, Name: "", Contacts: ko.observableArray([]), Groups: ko.observableArray([]) };
+    self.clearDistr = { Id: 0, Name: "", Contacts: ko.observableArray([]), Groups: ko.observableArray([]), Template: { Id: 0, Name: "" } };
     self.distrs = ko.observableArray([]);
     self.loadDistrs = function ()
     {
@@ -101,11 +116,22 @@ function DistributionsViewModel()
                 ko.mapping.fromJS(response, mapping, self.allContacts);
             });
     };
+    self.loadTemplates = function ()
+    {
+        templatesService.call(
+            "LoadTemplates",
+            null,
+            function (response)
+            {
+                ko.mapping.fromJS(response, mapping, self.templates);
+            });
+    };
     self.createDistr = function ()
     {
         self.currentDistr(self.clearDistr);
         self.contextGroups(self.allGroups.Select("$.Name()"));
         self.contextContacts(self.allContacts.Select("$.Email()"));
+        self.contextTemplates(self.templates.Select("$.Name()"));
         self.selectedGroup("");
         self.selectedContact("");
         $("#distrModal").modal(options);
@@ -114,4 +140,5 @@ function DistributionsViewModel()
     self.loadDistrs();
     self.loadContacts();
     self.loadGroups();
+    self.loadTemplates();
 }

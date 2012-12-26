@@ -14,6 +14,12 @@
     <div class="modal-body" style="max-height: 500px;">
         <!-- ko with: currentDistr -->
         <input type="text" class="input-block-level" placeholder="Name" data-bind="value: Name" required maxlength="250" />
+        <!-- /ko -->
+        
+        <input class="input-block-level" type="text" placeholder="Select mail template" id="templateTpah"
+               data-bind="typeahead: { target: selectedTemplate, source: contextTemplates, options: { clearOnBlur: false } }">
+
+        <!-- ko with: currentDistr -->
         <p style="margin-bottom: 8px;">
             <span data-bind="visible: Contacts().length < 1" class="muted">No contacts</span>
             <span data-bind="foreach: Contacts" >
@@ -21,10 +27,9 @@
             </span>
         </p>
         <!-- /ko -->
-        <form>
-        <input class="input-block-level" type="text" placeholder="Contacts to assign" id="contactsTpa"
+        <input class="input-block-level" type="text" placeholder="Contacts to assign" id="contactsTpah"
                data-bind="typeahead: { target: selectedContact, source: contextContacts }, enterPress: addContact">
-        </form>
+
         <!-- ko with: currentDistr -->
         <p style="margin-bottom: 8px;">
             <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
@@ -33,7 +38,7 @@
             </span>
         </p>
         <!-- /ko -->
-        <input class="input-block-level" type="text" placeholder="Group to assign" id="groupsTpa"
+        <input class="input-block-level" type="text" placeholder="Group to assign" id="groupsTpah"
                data-bind="typeahead: { target: selectedGroup, source: contextGroups }, enterPress: addGroup">
     </div>
     <div class="modal-footer">
@@ -52,19 +57,18 @@
     </h1>
 </div>
 
-<button class="btn btn-primary" title="Create new Distribution" data-bind="click: createDistr">
+<button class="btn btn-primary btn-small" title="Create new Distribution" data-bind="click: createDistr">
     Create new Distribution
 </button>
 
 <div class="row-fluid">
-    [TOOLBAR]
     <div class="accordion" id="accordion" data-bind="foreach: distrs">
         <div class="accordion-group">
             <div class="accordion-heading">
                 <div class="row-fluid">
                     <div class="span1 hidden-phone">[ICON]</div>
                     <div class="span11">
-                        <h3><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-bind="text: Name, attr: { href: 'did' + Id}">Name of distr</a></h3>
+                        <h3><a data-toggle="collapse" data-parent="#accordion" data-bind="text: Name, attr: { href: '#dId' + Id()}">Name of distr</a></h3>
                         <div>
                             To Groups:&nbsp;
                             <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
@@ -82,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="accordion-body collapse in" data-bind="attr: { id: 'did' + Id}">
+            <div class="accordion-body collapse" data-bind="attr: { id: 'dId' + Id()}">
                 <div class="accordion-inner">
                     [REPLIES]
                 </div>

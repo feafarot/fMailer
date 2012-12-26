@@ -15,9 +15,9 @@ namespace fMailer.Domain.ModelMappings
         {
             Id(x => x.Id);
 
-            Map(x => x.Name).Not.Nullable();
+            Map(x => x.Name).Not.Nullable().Unique();
 
-            References(x => x.User).Not.Nullable().Cascade.SaveUpdate();
+            References(x => x.User).Not.Nullable();
             References(x => x.Template).ForeignKey().Not.Nullable();
 
             HasMany(x => x.Replies).Cascade.All();

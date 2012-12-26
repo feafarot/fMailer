@@ -13,5 +13,13 @@ namespace fMailer.Web.Core.Settings
         TimeSpan DefaultSessionLiveTime { get; }
 
         bool UsePasswordsHashing { get; }
+
+        string FirstNameKeyword { get; }
+
+        string LastNameKeyword { get; }
+
+        string MiddleNameKeyword { get; }
+
+        string FullNameKeyword { get; }
     }
 }

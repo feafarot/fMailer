@@ -42,7 +42,7 @@ namespace fMailer.Web.Controllers.Domain
                 var temp = Repository.GetById<MailTemplate>(template.Id);
                 temp.Name = template.Name;
                 temp.Text = template.Text;
-                temp.Description = template.Description;                
+                temp.Subject = template.Subject;                
             }
 
             return Json(template.Id);

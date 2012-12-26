@@ -89,14 +89,12 @@ ko.bindingHandlers.typeahead =
 {
     init: function (element, valueAccessor)
     {
-        var binding = this;
         var value = valueAccessor();
-
-        this.self = this;
-        self.elem = $("#" + element.id);
+        var elem = $(element);
+        var options = value.options;
 
         // Setup Bootstrap Typeahead for this element.
-        self.elem.typeahead(
+        elem.typeahead(
         {
             source: function () { return ko.utils.unwrapObservable(value.source); },
             onselect: function (val)
@@ -106,19 +104,26 @@ ko.bindingHandlers.typeahead =
         });
 
         // Set the value of the target when the field is blurred.
-        self.elem.blur(function ()
+        elem.blur(function ()
         {
-            value.target(self.elem.val());
-            self.elem.val("");
+            value.target(elem.val());
+            if (options == null || options.clearOnBlur == null || options.clearOnBlur == true)
+            {
+                elem.val("");
+            }
         });
-        self.elem.keypress(function (event)
+        elem.keypress(function (event)
         {
             var keyCode = (event.which ? event.which : event.keyCode);
             if (keyCode === 13)
             {
-                self.elem.blur();
-                self.elem.focus();
-                self.elem.val("");
+                elem.blur();
+                elem.focus();
+                if (options == null || options.clearOnBlur == null || options.clearOnBlur == true)
+                {
+                    elem.val("");
+                }
+
                 return false;
             }
 
@@ -130,6 +135,52 @@ ko.bindingHandlers.typeahead =
         var elem = $("#" + element.id);
         var value = valueAccessor();
         elem.val(value.target());
+    }
+};
+
+ko.bindingHandlers.advancedEditor = {
+    init: function (element, valueAccessor, allBindingsAccessor)
+    {
+        var value = valueAccessor();
+        var elem = $("#" + element.id);
+        elem.wysihtml5({
+            "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
+            "emphasis": true, //Italics, bold, etc. Default true
+            "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+            "html": true, //Button which allows you to edit the generated HTML. Default false
+            "link": true, //Button to insert a link. Default true
+            "image": true, //Button to insert an image. Default true,
+            "color": true, //Button to change color of font
+            "events":
+                {
+                    "change": changeHandler,
+                    "load": function ()
+                    {
+                        elem[0].isloaded = true;
+                    }
+                }
+        });
+
+        function changeHandler()
+        {
+            value.target(elem.val());
+        }
+    },
+    update: function (element, valueAccessor)
+    {
+        var elem = $("#" + element.id);
+        var interval = window.setInterval(
+            function ()
+            {
+                if (elem[0].isloaded === true)
+                {
+                    var value = valueAccessor();
+                    elem.data("wysihtml5").editor.composer.commands.exec("insertHTML", value.target());
+                    ko.bindingHandlers.value.update(element, valueAccessor);
+                    window.clearInterval(interval);
+                }
+            },
+            200);
     }
 };
 

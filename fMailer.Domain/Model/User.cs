@@ -58,5 +58,11 @@ namespace fMailer.Domain.Model
             group.User = this;
             ContactsGroups.Add(group);
         }
+
+        public virtual void AddDistribution(Distribution distribution)
+        {
+            distribution.User = this;
+            Distributions.Add(distribution);
+        }
     }
 }

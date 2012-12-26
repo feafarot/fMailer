@@ -88,6 +88,9 @@
     <Content Include="RecreateDatabase.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fMailer.Domain\fMailer.Domain.csproj">

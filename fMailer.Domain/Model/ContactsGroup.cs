@@ -23,6 +23,7 @@ namespace fMailer.Domain.Model
         [ScriptIgnore]
         public virtual User User { get; set; }
 
+        [ScriptIgnore]
         public virtual IList<Distribution> Distributions { get; set; }
     }
 }

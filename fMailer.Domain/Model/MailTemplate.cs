@@ -17,8 +17,9 @@ namespace fMailer.Domain.Model
 
         public virtual string Name { get; set; }
 
-        public virtual string Description { get; set; }
+        public virtual string Subject { get; set; }
 
+        [ScriptIgnore]
         public virtual IList<Distribution> Distributions { get; set; }
 
         [ScriptIgnore]
