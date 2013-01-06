@@ -10,11 +10,33 @@
         <h3 id="newTemplateModalLabel" data-bind="text: modalHeader"></h3>
     </div>
     <div class="modal-body" style="max-height: 500px;" data-bind="with: currentTemplate">
+        <!-- ko with: currentTemplate -->
         <input type="text" class="input-block-level" placeholder="Template name" data-bind="value: Name" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="Subject" data-bind="value: Subject" maxlength="250" />
+        <p style="margin-bottom: 8px;">
+            Attachments:&nbsp;
+            <span data-bind="visible: Attachments().length < 1" class="muted">No attachments</span>
+            <span data-bind="foreach: Attachments" >
+                <span class="label label-info"><span data-bind="text: Name"></span><button class="close close-inlabel" data-bind="click: removeAttachment">&times;</button></span>
+            </span>
+        </p>
+        <!-- /ko -->
+
+        <div id="upload" class="fileupload fileupload-new" data-provides="fileupload">
+            <span class="btn btn-file">
+                <span class="fileupload-new">Select file</span>
+                <span class="fileupload-exists">Change</span>
+                <input type="file" data-bind="file: imageFile, fileObjectURL: imageObjectURL, fileBinaryData: imageBinary" />
+            </span>
+            <span class="fileupload-preview"></span>
+            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+            <button class="btn btn-info" data-bind="click: addAttachment, enable: imageFile">Add attachment</button>
+        </div>
+                
+        <!-- ko with: currentTemplate -->
         <textarea class="input-block-level" style="height: 300px; overflow-y:scroll;" id="textEdit"
-                  data-bind="value: Text"></textarea>
-                  @*data-bind="advancedEditor: { target: Text }"></textarea>*@
+                  data-bind="advancedEditor: { target: Text }"></textarea>
+        <!-- /ko -->
     </div>
     <div class="modal-footer">
         <div class="progress progress-striped active" style="height: 4px; margin: -9px 0px 5px 0px; display: none;" data-bind="visible: isBusy">
@@ -60,7 +82,7 @@
                         </div>
                         <div class="span11">
                             <p>
-                                <h3><a href="#" data-bind="text: Name, click: editTemplate"></a><button class="close pull-right" title="Delete template" data-bind="click: deleteTemplate">x</button></h3>
+                                <h3><a href="#" data-bind="text: Name, click: editTemplate"></a><button class="close pull-right" title="Delete template" data-bind="click: deleteTemplate">&times;</button></h3>
                             </p>
                             <span data-bind="text: Subject"></span>
                         </div>

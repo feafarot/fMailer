@@ -59,6 +59,7 @@
     <Compile Include="DataAccess\NHibernateQueryEngine.cs" />
     <Compile Include="ModelMappings\ContactMapping.cs" />
     <Compile Include="ModelMappings\ContactsGropMapping.cs" />
+    <Compile Include="ModelMappings\AttachmentMapping.cs" />
     <Compile Include="ModelMappings\DistributionMapping.cs" />
     <Compile Include="ModelMappings\ForeignKeys.cs" />
     <Compile Include="ModelMappings\MailTemplateMapping.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="ModelMappings\SessionMapping.cs" />
     <Compile Include="ModelMappings\SettingsMapping.cs" />
     <Compile Include="ModelMappings\UserMapping.cs" />
+    <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\Contact.cs" />
     <Compile Include="Model\ContactsGroup.cs" />
     <Compile Include="Model\Distribution.cs" />

@@ -4,7 +4,7 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
-var authService = new function()
+var authService = new function ()
 {
     var extended = $.extend({}, new baseService("AuthDomain"));
     return extended;
@@ -16,7 +16,8 @@ var templatesService = new function ()
     return extended;
 };
 
-var contactsService = new function () {
+var contactsService = new function ()
+{
     var extended = $.extend({}, new baseService("ContactsDomain"));
     return extended;
 };
@@ -32,7 +33,7 @@ function baseService(service)
     var serviceName = service;
     var instance =
         {
-            call: function(method, data, successCall, errorCall)
+            call: function (method, data, successCall, errorCall)
             {
                 // !TODO: BE CARE WITH DEPLOYMENT!!! in 'getLocation' method should be passed 'false' on real server.
                 callService(getLocation(true) + "/" + serviceName, method, data, successCall, errorCall);
@@ -49,7 +50,7 @@ function callService(serviveLink, method, data, successCall, errorCall)
     $.ajax(
         {
             url: serviveLink + "/" + method,
-            data: $.toJson(data),
+            data: ko.toJSON(data),
             type: "POST",
             processData: true,
             success: successCall,
@@ -63,7 +64,7 @@ function callService(serviveLink, method, data, successCall, errorCall)
                 timersManager.closeAll();
                 if (textStatus != null)
                 {
-                    if (false)
+                    if (true)
                     {
                         var generator = window.open('', 'Server Error', 'width=1024,height=800,toolbar=no,location=yes,directories=yes,status=yes,menubar=no,scrollbars=yes,copyhistory=no,resizable=yes');
                         generator.document.write(jqXHR.responseText);

@@ -223,6 +223,8 @@
     <Content Include="Content\Bootstrap\Css\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap.css" />
     <Content Include="Content\Bootstrap\Css\bootstrap.min.css" />
+    <Content Include="Content\Bootstrap\Font\iconic_fill.svg" />
+    <Content Include="Content\Bootstrap\Font\iconic_stroke.svg" />
     <Content Include="Content\Bootstrap\Img\glyphicons-halflings-white.png" />
     <Content Include="Content\Bootstrap\Img\glyphicons-halflings.png" />
     <Content Include="Content\Bootstrap\Js\bootstrap.js" />
@@ -310,6 +312,14 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Content\Bootstrap\Font\iconic_fill.eot" />
+    <Content Include="Content\Bootstrap\Font\iconic_fill.otf" />
+    <Content Include="Content\Bootstrap\Font\iconic_fill.ttf" />
+    <Content Include="Content\Bootstrap\Font\iconic_fill.woff" />
+    <Content Include="Content\Bootstrap\Font\iconic_stroke.eot" />
+    <Content Include="Content\Bootstrap\Font\iconic_stroke.otf" />
+    <Content Include="Content\Bootstrap\Font\iconic_stroke.ttf" />
+    <Content Include="Content\Bootstrap\Font\iconic_stroke.woff" />
     <None Include="Scripts\linq-vsdoc.js" />
     <Content Include="Scripts\linq.js" />
     <Content Include="Scripts\linq.min.js" />

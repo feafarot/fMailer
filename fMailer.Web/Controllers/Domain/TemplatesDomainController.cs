@@ -4,6 +4,8 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,6 +17,7 @@ using fMailer.Web.Core.Settings;
 
 namespace fMailer.Web.Controllers.Domain
 {
+    [ValidateInput(false)]
     public class TemplatesDomainController : BaseController
     {
         public TemplatesDomainController(IRepository repository, IMailerSettings settings, ISessionManager sessionManager)
@@ -29,12 +32,29 @@ namespace fMailer.Web.Controllers.Domain
         }
 
         [HttpPost]
+        public JsonResult LoadPureTemplates()
+        {
+            var tr = new List<MailTemplate>();
+            var templates = User.Templates.ToArray();
+            foreach (var template in templates)
+            {
+                var clone = template.Clone();
+                clone.Text = "";
+                tr.Add(clone);
+            }
+
+            return Json(tr);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
         public JsonResult UpdateTemplate(MailTemplate template)
         {
             if (template.Id < 1)
             {
                 // New Item
-                User.AddTemplate(template);
+                template.UpdateAttachments();
+                User.AddTemplate(template);                
             }
             else
             {
@@ -42,7 +62,19 @@ namespace fMailer.Web.Controllers.Domain
                 var temp = Repository.GetById<MailTemplate>(template.Id);
                 temp.Name = template.Name;
                 temp.Text = template.Text;
-                temp.Subject = template.Subject;                
+                temp.Subject = template.Subject;
+                temp.Attachments.Clear();
+                foreach (var attachment in template.Attachments)
+                {
+                    if (attachment.Id < 1)
+                    {
+                        temp.AddAttachment(attachment);
+                    }
+                    else
+                    {
+                        temp.Attachments.Add(Repository.GetById<Attachment>(attachment.Id));
+                    }
+                }
             }
 
             return Json(template.Id);
@@ -54,6 +86,15 @@ namespace fMailer.Web.Controllers.Domain
             var temp = Repository.GetById<MailTemplate>(template.Id);
             Repository.Delete(temp);
             return Json(true);
+        }
+        
+        [HttpGet]
+        public FileContentResult LoadAttachment(int id)
+        {
+            var attachment = Repository.GetById<Attachment>(id);
+            var fileResult = new FileContentResult(attachment.Content, attachment.ContentType);
+            fileResult.FileDownloadName = attachment.Name;
+            return fileResult;
         }
     }
 }

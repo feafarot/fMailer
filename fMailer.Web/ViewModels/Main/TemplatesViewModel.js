@@ -4,6 +4,17 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
+function getArrayFromUint8Array(array)
+{
+    var result = [array.length];
+    for (var i = 0; i < array.length; i++)
+    {
+        result[i] = array[i];
+    }
+
+    return result;
+}
+
 function TemplatesViewModel()
 {
     this.self = this;
@@ -15,33 +26,57 @@ function TemplatesViewModel()
             return -1;
         }
     };
+
     var options = { backdrop: "static", keyboard: false };
-    self.deleteCandidate = null;
+    self.clerAttachment = { Id: 0, Content: ko.observable(), ContentType: ko.observable(""), Size: 0, Name: ko.observable() };
+    self.clearTemplate = { Id: 0, Name: "", Text: ko.observable(""), Subject: "", Attachments: ko.observableArray([]) };
+
+    self.imageFile = ko.observable();
+    self.imageObjectURL = ko.observable();
+    self.imageBinary = ko.observable();
+
+    self.deleteCandidate = ko.observable(clearTemplate);
     self.deleteCandidateName = ko.observable("");
     self.modalHeader = ko.observable("");
-    self.currentTemplate = ko.observable({ Id: 0, Name: "", Text: ko.observable(""), Subject: "" }).track();
+    self.currentTemplate = ko.observable(clearTemplate);
+    self.currentTemplateText = ko.observable("");
     self.templates = ko.observableArray([]);
     self.isBusy = ko.observable(false);
 
+    self.addAttachment = function ()
+    {
+        self.currentTemplate().Attachments.push({
+            Id: 0,
+            Name: self.imageFile().name,
+            ContentType: self.imageFile().type,
+            Content: getArrayFromUint8Array(new Uint8Array(self.imageBinary())),
+            Size: self.imageFile().size
+        });
+        self.imageFile(null);
+        $("#upload").fileupload('reset');
+    };
+    self.removeAttachment = function (attachment)
+    {
+        self.currentTemplate().Attachments.remove(attachment);
+    };
     self.openCreateTemplateModal = function ()
     {
-        self.currentTemplate({ Id: 0, Name: "", Text: ko.observable(""), Subject: "" });
+        self.currentTemplate(clearTemplate);
         self.modalHeader("Create new template");
         $("#newTemplateModal").modal(options);
     };
     self.editTemplate = function (template)
-    {        
+    {
         self.currentTemplate(template);
         self.modalHeader("Edit template");
         $("#newTemplateModal").modal(options);
     };
     self.saveChanges = function ()
     {
-        self.currentTemplate.commit();
         self.isBusy(true);
         templatesService.call(
             "UpdateTemplate",
-            { template: ko.toJSON(currentTemplate) },
+            { template: unwrapObs(self.currentTemplate) },
             function (response)
             {
                 self.loadTemplates();
@@ -51,8 +86,7 @@ function TemplatesViewModel()
     };
     self.cancelChanges = function ()
     {
-        self.currentTemplate.cancel();
-        $('#newTemplateModal').modal("toggle")        
+        $('#newTemplateModal').modal("toggle")
     };
     self.loadTemplates = function ()
     {
@@ -66,7 +100,7 @@ function TemplatesViewModel()
     };
     self.deleteTemplate = function (template)
     {
-        self.deleteCandidate = template;
+        self.deleteCandidate(template);
         self.deleteCandidateName(template.Name);
         $("#confirmationModal").modal(options);
     };
@@ -80,14 +114,14 @@ function TemplatesViewModel()
         self.isBusy(true);
         templatesService.call(
             "DeleteTemplate",
-            { template: ko.toJSON(self.deleteCandidate) },
+            { template: unwrapObs(self.deleteCandidate) },
             function (response)
             {
                 self.loadTemplates();
                 $("#confirmationModal").modal("toggle");
                 self.deleteCandidateName("");
                 self.isBusy(false);
-            });        
+            });
     };
 
 

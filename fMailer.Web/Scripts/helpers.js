@@ -4,14 +4,27 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
+var windowURL = window.URL || window.webkitURL;
+
 function trackable(item)
 {
-
 }
 
 function unwrapObs(observable)
 {
     return ko.utils.unwrapObservable(observable);
+}
+
+function htmlEncode(value)
+{
+    //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+    //then grab the encoded contents back out.  The div never exists on the page.
+    return $('<div/>').text(value).html();
+}
+
+function htmlDecode(value)
+{
+    return $('<div/>').html(value).text();
 }
 
 function getLocation(isLocal)
@@ -163,7 +176,7 @@ ko.bindingHandlers.advancedEditor = {
 
         function changeHandler()
         {
-            value.target(elem.val());
+            value.target(escape(elem.val().replace(/"/g, "†qte†").replace(/=/g, "†rvn†")));
         }
     },
     update: function (element, valueAccessor)
@@ -175,12 +188,65 @@ ko.bindingHandlers.advancedEditor = {
                 if (elem[0].isloaded === true)
                 {
                     var value = valueAccessor();
-                    elem.data("wysihtml5").editor.composer.commands.exec("insertHTML", value.target());
+                    elem.data("wysihtml5").editor.setValue(unescape(value.target()).replace(/†qte†/g, '"').replace(/†rvn†/g, '='));
                     ko.bindingHandlers.value.update(element, valueAccessor);
                     window.clearInterval(interval);
                 }
             },
-            200);
+            100);
+        if (elem[0].isloaded === true)
+        {
+            var value = valueAccessor();
+            elem.data("wysihtml5").editor.setValue(unescape(value.target()).replace(/†qte†/g, '"').replace(/†rvn†/g, '='));
+            ko.bindingHandlers.value.update(element, valueAccessor);
+            window.clearInterval(interval);
+        }
+    }
+};
+
+ko.bindingHandlers.file = {
+    init: function (element, valueAccessor)
+    {
+        $(element).change(function ()
+        {
+            var file = this.files[0];
+            if (ko.isObservable(valueAccessor()))
+            {
+                valueAccessor()(file);
+            }
+        });
+    },
+
+    update: function (element, valueAccessor, allBindingsAccessor)
+    {
+        var file = ko.utils.unwrapObservable(valueAccessor());
+        var bindings = allBindingsAccessor();
+
+        if (bindings.fileObjectURL && ko.isObservable(bindings.fileObjectURL))
+        {
+            var oldUrl = bindings.fileObjectURL();
+            if (oldUrl)
+            {
+                windowURL.revokeObjectURL(oldUrl);
+            }
+            bindings.fileObjectURL(file && windowURL.createObjectURL(file));
+        }
+
+        if (bindings.fileBinaryData && ko.isObservable(bindings.fileBinaryData))
+        {
+            if (!file)
+            {
+                bindings.fileBinaryData(null);
+            } else
+            {
+                var reader = new FileReader();
+                reader.onload = function (e)
+                {
+                    bindings.fileBinaryData(e.target.result);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
     }
 };
 

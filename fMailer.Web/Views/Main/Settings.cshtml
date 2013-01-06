@@ -98,6 +98,14 @@
         <legend>POP3</legend>
 
         <div class="control-group">
+            @Html.LabelFor(model => model.IsGmail, new { @class = "control-label" })
+            <div class="controls">
+                @Html.CheckBoxFor(model => model.IsGmail)
+                @Html.ValidationMessageFor(model => model.IsGmail)
+            </div>
+        </div>
+
+        <div class="control-group">
             @Html.LabelFor(model => model.Pop3Address, new { @class = "control-label" })
             <div class="controls">
                 @Html.TextBoxFor(model => model.Pop3Address)

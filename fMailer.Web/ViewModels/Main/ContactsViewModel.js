@@ -23,7 +23,8 @@ function ContactsViewModel()
 
     // Modal part
     self.isBusy = ko.observable(false);
-    self.currentContact = ko.observable({ FirstName: "", LastName: "", MiddleName: "", Email: "", Groups: ko.observableArray([]) });
+    self.clearContact = { FirstName: "", LastName: "", MiddleName: "", Email: "", Groups: ko.observableArray([]) };
+    self.currentContact = ko.observable(self.clearContact);
     self.selectedGroup = ko.observable({ Id: null, Name: "" });
     self.allGroups = ko.observableArray([]);
     self.contextGroups = ko.observableArray([""]);
@@ -31,7 +32,7 @@ function ContactsViewModel()
     self.rbcContact = ko.observable({});
     self.modalHeader = ko.observable("");
 
-    self.deleteCandidate = null;
+    self.deleteCandidate = ko.observable(self.clearContact);
     self.deleteCandidateName = ko.observable("");
 
     // Main part
@@ -69,7 +70,7 @@ function ContactsViewModel()
         self.isBusy(true);
         contactsService.call(
             "UpdateOrCreateContact",
-            { contact: ko.toJSON(self.currentContact) },
+            { contact: unwrapObs(self.currentContact) },
             function (response)
             {
                 self.loadContacts();
@@ -80,7 +81,7 @@ function ContactsViewModel()
     };
     self.createNewContact = function ()
     {
-        self.currentContact({ FirstName: "", LastName: "", MiddleName: "", Email: "", Groups: ko.observableArray([]) });
+        self.currentContact(self.clearContact);
         self.contextGroups(self.allGroups.Select("$.Name()"));
         self.selectedGroup("");
         self.modalHeader("Create new contact");
@@ -123,24 +124,25 @@ function ContactsViewModel()
 
     self.deleteContact = function (contact)
     {
-        self.deleteCandidate = contact;
+        self.deleteCandidate(contact);
         self.deleteCandidateName(unwrapObs(contact.LastName) + " " + unwrapObs(contact.FirstName) + " " + unwrapObs(contact.MiddleName));
         $("#confirmationModal").modal(options);
     };
     self.cancelDelete = function ()
     {
-        self.deleteCandidate = null;
+        self.deleteCandidate(self.clearContact);
         self.deleteCandidateName("");
     };
     self.confirmDelete = function ()
     {
         self.isBusy(true);
-        templatesService.call(
-            "DeleteTemplate",
-            { template: ko.toJSON(self.deleteCandidate) },
+        contactsService.call(
+            "DeleteContact",
+            { contact: unwrapObs(self.deleteCandidate) },
             function (response)
             {
-                self.loadTemplates();
+                self.loadContacts();
+                self.loadGroups();
                 $("#confirmationModal").modal("toggle");
                 self.deleteCandidateName("");
                 self.isBusy(false);

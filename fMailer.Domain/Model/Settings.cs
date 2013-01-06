@@ -43,6 +43,8 @@ namespace fMailer.Domain.Model
 
         #region POP3
 
+        public virtual bool IsGmail { get; set; }
+
         public virtual string Pop3Address { get; set; }
 
         public virtual int? Pop3Prot { get; set; }

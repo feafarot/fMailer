@@ -71,10 +71,11 @@ function DistributionsViewModel()
         self.currentDistr().Template = self.templates.First("$.Name() === self.selectedTemplate()");
         distributionsService.call(
             "SubmitDistribution",
-            { distribution: ko.toJSON(self.currentDistr) },
+            { distribution: unwrapObs(self.currentDistr) },
             function (response)
             {
                 self.isBusy(false);
+                self.loadDistrs();
                 $("#distrModal").modal("toggle");
             });
     };
@@ -119,7 +120,7 @@ function DistributionsViewModel()
     self.loadTemplates = function ()
     {
         templatesService.call(
-            "LoadTemplates",
+            "LoadPureTemplates",
             null,
             function (response)
             {

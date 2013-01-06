@@ -23,6 +23,8 @@ namespace fMailer.Domain.ModelMappings
             Map(x => x.Name).Not.Nullable().Unique();
             Map(x => x.Subject);
 
+            HasMany(x => x.Attachments).Cascade.All();
+
             References(x => x.User).Column(ForeignKeys.UserFK).Not.Nullable();
         }
     }

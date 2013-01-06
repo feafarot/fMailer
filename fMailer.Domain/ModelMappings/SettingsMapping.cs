@@ -20,6 +20,7 @@ namespace fMailer.Domain.ModelMappings
             Map(x => x.Username);
             Map(x => x.Password);
 
+            Map(x => x.IsGmail);
             Map(x => x.Pop3Address);
             Map(x => x.Pop3Prot);
             Map(x => x.Pop3UseSsl);

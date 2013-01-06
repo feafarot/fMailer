@@ -15,6 +15,7 @@ using fMailer.Web.Core;
 using fMailer.Web.Core.HashProviders;
 using fMailer.Web.Core.Settings;
 using HigLabo.Net.Mail;
+using HigLabo.Net.Pop3;
 using HigLabo.Net.Smtp;
 
 namespace fMailer.Web.Controllers.Domain
@@ -29,7 +30,7 @@ namespace fMailer.Web.Controllers.Domain
         [HttpPost]
         public JsonResult LoadDistributions()
         {
-            return Json(User.Distributions);
+            return Json(User.Distributions.OrderByDescending(x => x.Id));
         }
 
         [HttpPost]
@@ -74,6 +75,15 @@ namespace fMailer.Web.Controllers.Domain
             var message = new SmtpMessage();
             message.Subject = GetCompleteText(contact, template.Subject);
             message.BodyText = GetCompleteText(contact, template.Text);
+            foreach (var attachment in template.Attachments)
+            {
+                var smtpContent = new SmtpContent();
+                smtpContent.LoadData(attachment.Content);
+                smtpContent.Name = attachment.Name;
+                smtpContent.FileName = attachment.Name;
+                message.Contents.Add(smtpContent);
+            }
+
             message.IsHtml = true;
             message.From = User.Settings.Username;
             message.To.Add(new MailAddress(contact.Email));
@@ -90,15 +100,28 @@ namespace fMailer.Web.Controllers.Domain
                 settings.Password);
             smtpClient.Ssl = settings.SmtpUseSsl;
             smtpClient.Pop3Client.ServerName = settings.Pop3Address;
-            smtpClient.Pop3Client.UserName = settings.Username;
+            smtpClient.Pop3Client.UserName = settings.IsGmail ? "recent:" + settings.Username : settings.Username;
             smtpClient.Pop3Client.Password = settings.Password;
             smtpClient.Pop3Client.Port = settings.Pop3Prot.Value;
             return smtpClient;
         }
 
+        private Pop3Client CreatePop3Client()
+        {
+            var settings = User.Settings;
+            var pop3Client = new Pop3Client(
+                settings.Pop3Address, 
+                settings.Pop3Prot.Value, 
+                settings.IsGmail ? "recent:" + settings.Username : settings.Username, 
+                settings.Password);
+            return pop3Client;
+        }
+
         private string GetCompleteText(Contact contact, string template)
         {
-            return template.Replace(Settings.FirstNameKeyword, contact.FirstName)
+            return template.Replace("†qte†", "\"")
+                           .Replace("†rvn†", "=")
+                           .Replace(Settings.FirstNameKeyword, contact.FirstName)
                            .Replace(Settings.LastNameKeyword, contact.LastName)
                            .Replace(Settings.MiddleNameKeyword, contact.MiddleName)
                            .Replace(Settings.FullNameKeyword, string.Format("{0} {1} {2}", contact.LastName, contact.FirstName, contact.MiddleName));

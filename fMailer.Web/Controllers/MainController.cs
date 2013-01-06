@@ -59,6 +59,7 @@ namespace fMailer.Web.Controllers
             User.Settings.SmtpUseAuth = model.SmtpUseAuth;
             User.Settings.SmtpUseSsl = model.SmtpUseSsl;
 
+            User.Settings.IsGmail = model.IsGmail;
             User.Settings.Pop3Address = model.Pop3Address;
             User.Settings.Pop3Prot = model.Pop3Prot;
             User.Settings.Pop3UseSsl = model.Pop3UseSsl;
