@@ -85,10 +85,10 @@ function DistributionsViewModel()
         {
             distributionsService.call(
                 "CloseDistribution",
-                { distribution: unwrapObs(distr) },
+                { distribution: { Id: distr.Id() } },
                 function (response)
                 {
-                    reply.IsClosed(true);
+                    distr.IsClosed(true);
                 });
         }
     };
