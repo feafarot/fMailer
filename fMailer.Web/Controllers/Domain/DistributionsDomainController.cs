@@ -4,7 +4,9 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,8 +30,30 @@ namespace fMailer.Web.Controllers.Domain
         }
 
         [HttpPost]
+        public JsonResult MarkReplyAsRead(Reply reply)
+        {
+            var realReply = Repository.GetById<Reply>(reply.Id);
+            realReply.IsNew = false;
+            return Json(true);
+        }
+
+        [HttpPost]
+        public JsonResult CloseDistribution(Distribution distribution)
+        {
+            var rds = Repository.GetById<Distribution>(distribution.Id);
+            rds.IsClosed = true;
+            return Json(true);
+        }
+
+        [HttpPost]
         public JsonResult LoadDistributions()
         {
+            //var messages = LoadMessages();
+            //if (messages.Count != 0)
+            //{
+            //    UpdateReplies(messages);
+            //}
+
             return Json(User.Distributions.OrderByDescending(x => x.Id));
         }
 
@@ -45,6 +69,25 @@ namespace fMailer.Web.Controllers.Domain
             User.AddDistribution(distributionToInsert);
             ProcessDistribution(distributionToInsert);
             return Json(true);
+        }
+
+        private List<MailMessage> LoadMessages()
+        {
+            var messages = new List<MailMessage>();
+            var pop3Client = CreatePop3Client();
+            if (!pop3Client.Authenticate())
+            {
+                Debug.WriteLine("POP3 authentification failed");
+                return messages;
+            }
+
+            var count = pop3Client.GetTotalMessageCount();
+            for (long i = count; i > 0; i--)
+            {
+                messages.Add(pop3Client.GetMessage(i));
+            }
+
+            return messages;
         }
 
         private void ProcessDistribution(Distribution distribution)
@@ -70,6 +113,50 @@ namespace fMailer.Web.Controllers.Domain
             sendTask.Wait();
         }
 
+        private void UpdateRepliesAndFails(IList<MailMessage> messages)
+        {
+            foreach (var distribution in User.Distributions.Where(x => !x.IsClosed))
+            {
+                var recipients = new List<Contact>(distribution.Contacts);
+                foreach (var contact in distribution.Groups.SelectMany(x => x.Contacts))
+                {
+                    if (recipients.FirstOrDefault(x => x.Id == contact.Id) == null)
+                    {
+                        recipients.Add(contact);
+                    }
+                }
+
+                foreach (var recipient in recipients)
+                {
+                    if (distribution.Replies.FirstOrDefault(x => x.From.Equals(recipient)) != null)
+                    {
+                        continue;
+                    }
+
+                    var message = messages
+                                    .FirstOrDefault(x => x.From.Contains(recipient.Email) && 
+                                                         IsSubjectReply(GetCompleteText(recipient, distribution.Template.Subject), x.Subject));
+                    if (message != null)
+                    {
+                        distribution.AddReply(CreateReplyFromMail(message, recipient));
+                    }
+                    else
+                    {
+                        // TODO: Implement handling of delivery failed messages
+                    }
+                }
+            }
+        }
+
+        private bool IsSubjectReply(string originalSubject, string inboxSubject)
+        {
+            var lowerOriginal = originalSubject.ToLower();
+            var lowerInbox = inboxSubject.ToLower();
+            return "re: " + lowerOriginal == lowerInbox ||
+                   lowerOriginal == lowerInbox ||
+                   lowerInbox.Contains(lowerOriginal);
+        }
+
         private SmtpMessage CreateMail(Contact contact, MailTemplate template)
         {
             var message = new SmtpMessage();
@@ -78,9 +165,10 @@ namespace fMailer.Web.Controllers.Domain
             foreach (var attachment in template.Attachments)
             {
                 var smtpContent = new SmtpContent();
+                smtpContent.ContentType.Value = attachment.ContentType;
+                smtpContent.ContentType.Name = attachment.Name;
+                smtpContent.ContentDisposition.FileName = attachment.Name;
                 smtpContent.LoadData(attachment.Content);
-                smtpContent.Name = attachment.Name;
-                smtpContent.FileName = attachment.Name;
                 message.Contents.Add(smtpContent);
             }
 
@@ -99,10 +187,6 @@ namespace fMailer.Web.Controllers.Domain
                 settings.Username, 
                 settings.Password);
             smtpClient.Ssl = settings.SmtpUseSsl;
-            smtpClient.Pop3Client.ServerName = settings.Pop3Address;
-            smtpClient.Pop3Client.UserName = settings.IsGmail ? "recent:" + settings.Username : settings.Username;
-            smtpClient.Pop3Client.Password = settings.Password;
-            smtpClient.Pop3Client.Port = settings.Pop3Prot.Value;
             return smtpClient;
         }
 
@@ -114,6 +198,7 @@ namespace fMailer.Web.Controllers.Domain
                 settings.Pop3Prot.Value, 
                 settings.IsGmail ? "recent:" + settings.Username : settings.Username, 
                 settings.Password);
+            pop3Client.Ssl = settings.Pop3UseSsl;
             return pop3Client;
         }
 
@@ -124,7 +209,23 @@ namespace fMailer.Web.Controllers.Domain
                            .Replace(Settings.FirstNameKeyword, contact.FirstName)
                            .Replace(Settings.LastNameKeyword, contact.LastName)
                            .Replace(Settings.MiddleNameKeyword, contact.MiddleName)
-                           .Replace(Settings.FullNameKeyword, string.Format("{0} {1} {2}", contact.LastName, contact.FirstName, contact.MiddleName));
+                           .Replace(Settings.FullNameKeyword, 
+                                    string.IsNullOrEmpty(contact.MiddleName) ?
+                                        string.Format("{0} {1}", contact.LastName, contact.FirstName) :
+                                        string.Format("{0} {1} {2}", contact.LastName, contact.FirstName, contact.MiddleName))
+                           .Trim();
+        }
+
+        private Reply CreateReplyFromMail(MailMessage message, Contact from)
+        {
+            return new Reply
+            {
+                From = from,
+                EmailText = message.BodyText,
+                RecievedOn = DateTime.Now,
+                Subject = message.Subject,
+                IsNew = true
+            };
         }
     }
 }

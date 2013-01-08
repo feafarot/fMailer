@@ -16,6 +16,7 @@ namespace fMailer.Domain.ModelMappings
             Id(x => x.Id);
 
             Map(x => x.Name).Not.Nullable().Unique();
+            Map(x => x.IsClosed).Not.Nullable().Default("0");
 
             References(x => x.User).Not.Nullable();
             References(x => x.Template).ForeignKey().Not.Nullable();

@@ -79,8 +79,40 @@ function DistributionsViewModel()
                 $("#distrModal").modal("toggle");
             });
     };
-    self.cancelDistr = function ()
+    self.closeDistr = function (distr)
     {
+        if (!distr.IsClosed())
+        {
+            distributionsService.call(
+                "CloseDistribution",
+                { distribution: unwrapObs(distr) },
+                function (response)
+                {
+                    reply.IsClosed(true);
+                });
+        }
+    };
+
+    self.currentReply = ko.observable({ Subject: "", EmailText: "" });
+    self.showReply = function (reply)
+    {
+        if (reply.IsNew())
+        {
+            distributionsService.call(
+                "MarkReplyAsRead",
+                { reply: unwrapObs(reply) },
+                function (response)
+                {
+                    reply.IsNew(false);
+                });
+        }
+        
+        self.currentReply(reply);
+        $("#replyModal").modal("show");
+    };
+    self.closeReply = function ()
+    {
+        $("#replyModal").modal("toggle");
     };
 
 
@@ -89,12 +121,14 @@ function DistributionsViewModel()
     self.distrs = ko.observableArray([]);
     self.loadDistrs = function ()
     {
+        $("#loadingModal").modal(options);
         distributionsService.call(
             "LoadDistributions",
             null,
             function (response)
             {
                 ko.mapping.fromJS(response, mapping, self.distrs);
+                $("#loadingModal").modal("toggle");
             });
     };
     self.loadGroups = function ()

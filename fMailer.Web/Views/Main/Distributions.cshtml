@@ -51,6 +51,31 @@
     </div>
 </div>
 
+<div id="loadingModal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 60000">
+    <div class="modal-body">
+        <div>
+            Downloading <i>distributions</i>. This operation may take some time.<br />
+            Please wait...
+        </div>
+        <div class="progress progress-striped active" style="height: 4px; margin: 0px 0px 5px 0px;">
+            <div class="bar" style="width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="replyModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true" style="z-index: 60000">
+    <div class="modal-header" data-bind="with: currentReply">
+        <h4 id="replyModalLabel"> <span data-bind="text: Subject"></span></h4>
+    </div>
+    <div class="modal-body" data-bind="with: currentReply">
+        <div data-bind="html: EmailText">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info" data-bind="click: closeReply">Close</button>
+    </div>
+</div>
+
 <div class="page-header">
     <h1 class="large">
         <img alt="Distributions" src="@Url.Content("~/Content/Images/Mail Out.png")" /> Distributions
@@ -66,29 +91,78 @@
         <div class="accordion-group" style="border-bottom: 1px solid lightgray;">
             <div class="accordion-heading">
                 <div class="row-fluid">
-                    <div class="span1 hidden-phone">[ICON]</div>
-                    <div class="span11">
+                    <div class="span1 hidden-phone">
+                        <img alt="Distribution image" src="@Url.Content("~/Content/Images/Mail Out(d).png")" style="margin-top: 40px;" />
+                    </div>
+                    <div class="span9">
                         <h3><a data-toggle="collapse" data-parent="#accordion" data-bind="text: Name, attr: { href: '#dId' + Id()}">Name of distr</a></h3>
                         <div>
                             To Groups:&nbsp;
                             <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
-                            <span data-bind="foreach: Groups">
+                            <span data-bind="foreach: Groups" style="word-wrap: break-word;">
                                 <span class="label label-info">#<span data-bind="text: Name"></span></span>
                             </span>
                         </div>
                         <div>
                             To Contacts:&nbsp;
                             <span data-bind="visible: Contacts().length < 1" class="muted">No contacts</span>
-                            <span data-bind="foreach: Contacts">
-                                <a data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>;
+                            <span data-bind="foreach: Contacts" style="word-wrap: break-word;">
+                                <span ><a data-bind="text: Email, attr: { href: 'mailto:'+Email() }"></a>;</span>
                             </span>
                         </div>
                     </div>
+                    <div class="span2">
+                        <h3>
+                            <button class="btn btn-danger btn-mini" data-bind="click: closeDistr, visible: !IsClosed()">Close</button>
+                            <span class="label" data-bind="visible: IsClosed()">Closed!</span>
+                        </h3>
+                        <div>Replies: <span class="text-info" data-bind="text: Replies().length"></span></div>
+                        <div>Failed: <span class="text-error" data-bind="text: FailedDeliveredContancts().length"></span></div>
+                    </div>
                 </div>
             </div>
-            <div class="accordion-body collapse" data-bind="attr: { id: 'dId' + Id()}">
+            <div class="accordion-body collapse" data-bind="attr: { id: 'dId' + Id()}" style="margin-top: 5px;">
                 <div class="accordion-inner">
-                    [REPLIES]
+                    <div class="row-fluid">
+                        <div class="span1">
+                            <a class="act act-primary">Replies:</a>
+                        </div>
+                        <div class="span11">
+                            <span data-bind="visible: Replies().length < 1" class="muted">There are no replies yet</span>
+                            <div data-bind="foreach: Replies">
+                                <div>
+                                    <i class="icon-fire" data-bind="visible: IsNew()"></i>
+                                    <span><a href="#" data-bind="click: showReply">Show reply</a></span>
+                                    <span>|</span>
+                                    <span data-bind="with: From">
+                                        <span data-bind="text: LastName"></span>
+                                        <span data-bind="text: FirstName"></span>
+                                        <span data-bind="text: MiddleName"></span>
+                                        &lt;<span data-bind="text: Email"></span>&gt;
+                                    </span>
+                                    <span class="text-info">|</span>
+                                    <span><span class="muted">Subject:</span> <span data-bind="text: Subject"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span1">
+                            <a class="act act-danger">Failed:</a>
+                        </div>
+                        <div class="span11">
+                            <span data-bind="visible: FailedDeliveredContancts().length < 1" class="muted">No one delivery failed</span>
+                            <div data-bind="foreach: FailedDeliveredContancts">
+                                <div>
+                                    <span data-bind="text: Email" class="text-error"></span>
+                                    &nbsp;<b>|</b>&nbsp;
+                                    <span data-bind="text: LastName"></span>
+                                    <span data-bind="text: FirstName"></span>
+                                    <span data-bind="text: MiddleName"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

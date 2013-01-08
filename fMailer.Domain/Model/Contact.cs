@@ -39,5 +39,22 @@ namespace fMailer.Domain.Model
         {
             Groups.Add(group);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Contact))
+            {
+                return false;
+            }
+
+            return ((Contact)obj).ToString() == this.ToString();
+        }
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(MiddleName) 
+                ? string.Format("{0} {1} <{2}>", LastName, FirstName, Email)
+                : string.Format("{0} {1} {2} <{3}>", LastName, FirstName, MiddleName, Email);
+        }
     }
 }

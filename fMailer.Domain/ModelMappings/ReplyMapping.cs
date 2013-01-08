@@ -11,7 +11,8 @@
 
             Map(x => x.RecievedOn).Not.Nullable();
             Map(x => x.EmailText).Not.Nullable().CustomSqlType("nvarchar(MAX)");
-            Map(x => x.IsNew).Not.Nullable();
+            Map(x => x.IsNew).Not.Nullable().Default("1");
+            Map(x => x.Subject).Not.Nullable();
 
             References(x => x.From).Not.Nullable().Cascade.SaveUpdate();
             References(x => x.Distribution).Not.Nullable().Cascade.SaveUpdate();
