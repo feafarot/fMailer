@@ -16,10 +16,17 @@ namespace fMailer.SqlUtility
 {
     public class Program
     {
+        private static string dbInstance = ".";
+
         public static void Main(string[] args)
         {
+            if (args.Length > 0)
+            {
+                dbInstance = args[0];
+            }
+
             Console.WriteLine("-Database recreating");
-            CreateAndWaitForProc("sqlcmd", "-S . -i RecreateDatabase.sql");
+            CreateAndWaitForProc("sqlcmd", string.Format("-S {0} -i RecreateDatabase.sql", dbInstance));
             Console.WriteLine("-Database recreated");
             Console.WriteLine();
 
@@ -33,7 +40,7 @@ namespace fMailer.SqlUtility
             Console.WriteLine("-Schema created successfully.");
             Console.WriteLine();         
             Console.WriteLine("-Filling DB with default values...");
-            CreateAndWaitForProc("sqlcmd", "-S . -i Defaults.sql");            
+            CreateAndWaitForProc("sqlcmd", string.Format("-S {0} -i Defaults.sql", dbInstance));
             Console.WriteLine("-All operations completed.");
             Console.WriteLine();
         }

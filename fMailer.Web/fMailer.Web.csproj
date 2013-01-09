@@ -320,6 +320,9 @@
     <Content Include="Content\Bootstrap\Font\iconic_stroke.otf" />
     <Content Include="Content\Bootstrap\Font\iconic_stroke.ttf" />
     <Content Include="Content\Bootstrap\Font\iconic_stroke.woff" />
+    <Content Include="Scripts\bootstrap-wysihtml5-0.0.2.min.js.map">
+      <DependentUpon>bootstrap-wysihtml5-0.0.2.js</DependentUpon>
+    </Content>
     <None Include="Scripts\linq-vsdoc.js" />
     <Content Include="Scripts\linq.js" />
     <Content Include="Scripts\linq.min.js" />

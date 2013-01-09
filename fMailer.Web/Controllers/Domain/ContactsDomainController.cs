@@ -69,6 +69,13 @@ namespace fMailer.Web.Controllers.Domain
             return Json(User.ContactsGroups);
         }
 
+        [HttpPost]
+        public JsonResult ImportContacts(Attachment attachment)
+        {
+
+            return Json(true);
+        }
+
         private void TryAddGroupToContact(Contact contact, ContactsGroup group)
         {
             if (contact.Groups.FirstOrDefault(x => x.Id == group.Id) == null)

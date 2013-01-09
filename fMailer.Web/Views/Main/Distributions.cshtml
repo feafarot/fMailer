@@ -85,6 +85,9 @@
 <button class="btn btn-primary btn-small" title="Create new Distribution" data-bind="click: createDistr">
     Create new Distribution
 </button>
+<button class="btn btn-info btn-small" title="Update distributions data" data-bind="click: loadDistrs">
+    Update distributions data
+</button>
 
 <div class="row-fluid">
     <div class="accordion" id="accordion" data-bind="foreach: distrs">
@@ -151,14 +154,20 @@
                             <a class="act act-danger">Failed:</a>
                         </div>
                         <div class="span11">
-                            <span data-bind="visible: FailedDeliveredContancts().length < 1" class="muted">No one delivery failed</span>
-                            <div data-bind="foreach: FailedDeliveredContancts">
+                            <span data-bind="visible: FailedDeliveries().length < 1" class="muted">No one delivery failed</span>
+                            <div data-bind="foreach: FailedDeliveries">
                                 <div>
-                                    <span data-bind="text: Email" class="text-error"></span>
-                                    &nbsp;<b>|</b>&nbsp;
-                                    <span data-bind="text: LastName"></span>
-                                    <span data-bind="text: FirstName"></span>
-                                    <span data-bind="text: MiddleName"></span>
+                                    <i class="icon-remove-sign" data-bind="visible: IsNew()"></i>
+                                    <span><a href="#" data-bind="click: showReply">Show reply</a></span>
+                                    <span>|</span>
+                                    <span data-bind="with: To">
+                                        <span data-bind="text: LastName"></span>
+                                        <span data-bind="text: FirstName"></span>
+                                        <span data-bind="text: MiddleName"></span>
+                                        &lt;<span data-bind="text: Email"></span>&gt;
+                                    </span>
+                                    <span class="text-info">|</span>
+                                    <span><span class="muted">Subject:</span> <span data-bind="text: Subject"></span></span>
                                 </div>
                             </div>
                         </div>

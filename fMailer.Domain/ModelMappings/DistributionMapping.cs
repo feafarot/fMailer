@@ -25,7 +25,7 @@ namespace fMailer.Domain.ModelMappings
 
             HasManyToMany(x => x.Contacts).Table("ContantToDistribution");
             HasManyToMany(x => x.Groups).Table("ContantsGroupToDistribution");
-            HasManyToMany(x => x.FailedDeliveredContancts).Table("FailedDeliveryContantToDistribution");
+            HasManyToMany(x => x.FailedDeliveries).Table("FailedDeliveryContantToDistribution");
         }
     }
 }

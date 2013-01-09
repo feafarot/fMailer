@@ -45,8 +45,12 @@
         <div class="control-group">
             @Html.LabelFor(model => model.Password, new { @class = "control-label" })
             <div class="controls">
-                @Html.TextBoxFor(model => model.Password)
+                @Html.PasswordFor(model => model.Password)
                 @Html.ValidationMessageFor(model => model.Password)
+                @if (!string.IsNullOrEmpty(Model.Password)) 
+                { 
+                <span class="text-info help-inline"><small>Password is already set. You can type new one to change</small></span>
+                }
             </div>
         </div>
     </fieldset>

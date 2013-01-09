@@ -75,7 +75,7 @@ function DistributionsViewModel()
             function (response)
             {
                 self.isBusy(false);
-                self.loadDistrs();
+                self.loadDistrsWP();
                 $("#distrModal").modal("toggle");
             });
     };
@@ -124,6 +124,18 @@ function DistributionsViewModel()
         $("#loadingModal").modal(options);
         distributionsService.call(
             "LoadDistributions",
+            null,
+            function (response)
+            {
+                ko.mapping.fromJS(response, mapping, self.distrs);
+                $("#loadingModal").modal("toggle");
+            });
+    };
+    self.loadDistrsWP = function ()
+    {
+        $("#loadingModal").modal(options);
+        distributionsService.call(
+            "LoadDistributionsWithoutProcessing",
             null,
             function (response)
             {

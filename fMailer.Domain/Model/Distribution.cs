@@ -17,7 +17,7 @@ namespace fMailer.Domain.Model
             Replies = new List<Reply>();
             Contacts = new List<Contact>();
             Groups = new List<ContactsGroup>();
-            FailedDeliveredContancts = new List<Contact>();
+            FailedDeliveries = new List<FailedDelivery>();
         }
 
         public virtual int Id { get; set; }
@@ -32,7 +32,7 @@ namespace fMailer.Domain.Model
 
         public virtual IList<ContactsGroup> Groups { get; set; }
 
-        public virtual IList<Contact> FailedDeliveredContancts { get; set; }
+        public virtual IList<FailedDelivery> FailedDeliveries { get; set; }
 
         public virtual bool IsClosed { get; set; }
 
@@ -43,6 +43,12 @@ namespace fMailer.Domain.Model
         {
             reply.Distribution = this;
             Replies.Add(reply);
+        }
+
+        public virtual void AddDeliveryFailed(FailedDelivery failed)
+        {
+            failed.Distribution = this;
+            FailedDeliveries.Add(failed);
         }
     }
 }

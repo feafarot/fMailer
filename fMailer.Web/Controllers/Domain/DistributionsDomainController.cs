@@ -58,6 +58,12 @@ namespace fMailer.Web.Controllers.Domain
         }
 
         [HttpPost]
+        public JsonResult LoadDistributionsWithoutProcessing()
+        {
+            return Json(User.Distributions.OrderByDescending(x => x.Id));
+        }
+
+        [HttpPost]
         public JsonResult SubmitDistribution(Distribution distribution)
         {
             var distributionToInsert = new Distribution();
@@ -142,10 +148,20 @@ namespace fMailer.Web.Controllers.Domain
                     }
                     else
                     {
-                        // TODO: Implement handling of delivery failed messages
+                        var failedMessage = messages.FirstOrDefault(x => IsSubjectDeliveryFailed(x.Subject) && x.BodyText.Contains(recipient.Email));
+                        if (failedMessage != null)
+                        {
+                            distribution.AddDeliveryFailed(CreateFailedDeliveryFromMail(failedMessage, recipient));
+                        }
                     }
                 }
             }
+        }
+
+        private bool IsSubjectDeliveryFailed(string inboxSubject)
+        {
+            var lowerInbox = inboxSubject.ToLower();
+            return lowerInbox.Contains("delivey") && lowerInbox.Contains("failed");
         }
 
         private bool IsSubjectReply(string originalSubject, string inboxSubject)
@@ -223,6 +239,17 @@ namespace fMailer.Web.Controllers.Domain
                 From = from,
                 EmailText = message.BodyText,
                 RecievedOn = DateTime.Now,
+                Subject = message.Subject,
+                IsNew = true
+            };
+        }
+
+        private FailedDelivery CreateFailedDeliveryFromMail(MailMessage message, Contact to)
+        {
+            return new FailedDelivery
+            {
+                To = to,
+                EmailText = message.BodyText,
                 Subject = message.Subject,
                 IsNew = true
             };

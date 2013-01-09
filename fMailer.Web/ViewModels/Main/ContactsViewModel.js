@@ -35,6 +35,33 @@ function ContactsViewModel()
     self.deleteCandidate = ko.observable(self.clearContact);
     self.deleteCandidateName = ko.observable("");
 
+    // Import part
+    self.imageFile = ko.observable();
+    self.imageObjectURL = ko.observable();
+    self.imageBinary = ko.observable();
+    self.importContacts = function ()
+    {
+        $("#loadingModal").modal(options);
+        contactsService.call(
+            "ImportContacts",
+            { attachment:
+                  {
+                    Id: 0,
+                    Name: self.imageFile().name,
+                    ContentType: self.imageFile().type,
+                    Content: getArrayFromUint8Array(new Uint8Array(self.imageBinary())),
+                    Size: self.imageFile().size
+                }
+            },
+            function (response)
+            {
+                self.loadContacts();
+                self.loadGroups();
+                $("#loadingModal").modal("toggle");
+            });
+        self.imageFile(null);
+    }
+
     // Main part
     self.contacts = ko.observableArray([]);
     self.loadContacts = function ()

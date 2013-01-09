@@ -272,3 +272,15 @@ $.toJson = function (object)
 {
     return JSON.stringify(object);
 }
+
+
+function getArrayFromUint8Array(array)
+{
+    var result = [array.length];
+    for (var i = 0; i < array.length; i++)
+    {
+        result[i] = array[i];
+    }
+
+    return result;
+}

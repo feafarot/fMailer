@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>feafarot</Author>
+  <LastAuthor>RKonkin</LastAuthor>
+  <Created>2013-01-07T22:56:31Z</Created>
+  <LastSaved>2013-01-07T23:41:36Z</LastSaved>
+  <Company>Home</Company>
+  <Version>14.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>8610</WindowHeight>
+  <WindowWidth>19035</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>60</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s16" ss:Name="Hyperlink">
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#0000FF"
+    ss:Underline="Single"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Contacts">
+  <Table ss:ExpandedColumnCount="5" ss:ExpandedRowCount="4" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="15">
+   <Column ss:AutoFitWidth="0" ss:Width="190.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="87.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="88.5"/>
+   <Column ss:Width="66.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="155.25"/>
+   <Row>
+    <Cell><Data ss:Type="String">Email</Data></Cell>
+    <Cell><Data ss:Type="String">First name</Data></Cell>
+    <Cell><Data ss:Type="String">Last name</Data></Cell>
+    <Cell><Data ss:Type="String">Middle name</Data></Cell>
+    <Cell><Data ss:Type="String">Groups</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s16" ss:HRef="mailto:feafarot@live.com"><Data
+      ss:Type="String">feafarot@live.com</Data></Cell>
+    <Cell><Data ss:Type="String">Roman</Data></Cell>
+    <Cell><Data ss:Type="String">Ko</Data></Cell>
+    <Cell><Data ss:Type="String">Vl</Data></Cell>
+    <Cell><Data ss:Type="String">Developers;Guitar</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s16" ss:HRef="mailto:qsvfrgcvxdwqdasc@khust.net"><Data
+      ss:Type="String">qsvfrgcvxdwqdasc@khust.net</Data></Cell>
+    <Cell><Data ss:Type="String">Invalid1</Data></Cell>
+    <Cell><Data ss:Type="String">User</Data></Cell>
+    <Cell><Data ss:Type="String">Test</Data></Cell>
+    <Cell><Data ss:Type="String">TestMDF</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s16" ss:HRef="mailto:qwedsfvhk123@hirup.khmelnitskiy.ua"><Data
+      ss:Type="String">qwedsfvhk123@hirup.khmelnitskiy.ua</Data></Cell>
+    <Cell><Data ss:Type="String">Invalid2</Data></Cell>
+    <Cell><Data ss:Type="String">User</Data></Cell>
+    <Cell><Data ss:Type="String">Test</Data></Cell>
+    <Cell><Data ss:Type="String">TestMDF</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>1</ActiveRow>
+     <ActiveCol>4</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
