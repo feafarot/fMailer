@@ -22,10 +22,10 @@ namespace fMailer.Domain.ModelMappings
             References(x => x.Template).ForeignKey().Not.Nullable();
 
             HasMany(x => x.Replies).Cascade.All();
+            HasMany(x => x.FailedDeliveries).Cascade.All();
 
             HasManyToMany(x => x.Contacts).Table("ContantToDistribution");
             HasManyToMany(x => x.Groups).Table("ContantsGroupToDistribution");
-            HasManyToMany(x => x.FailedDeliveries).Table("FailedDeliveryContantToDistribution");
         }
     }
 }

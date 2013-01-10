@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using fMailer.Domain.DataAccess;
@@ -48,11 +50,11 @@ namespace fMailer.Web.Controllers.Domain
         [HttpPost]
         public JsonResult LoadDistributions()
         {
-            //var messages = LoadMessages();
-            //if (messages.Count != 0)
-            //{
-            //    UpdateReplies(messages);
-            //}
+            var messages = LoadMessages();
+            if (messages.Count != 0)
+            {
+                UpdateRepliesAndFails(messages);
+            }
 
             return Json(User.Distributions.OrderByDescending(x => x.Id));
         }
@@ -88,10 +90,52 @@ namespace fMailer.Web.Controllers.Domain
             }
 
             var count = pop3Client.GetTotalMessageCount();
-            for (long i = count; i > 0; i--)
+            for (int i = 1; i < count; i++)
             {
                 messages.Add(pop3Client.GetMessage(i));
             }
+
+            pop3Client.Close();
+
+            //var countPerThread = count / 7;
+            //var tasks = new List<Task>();
+            //var current = 1L;
+            //var off = count % 7;
+            //for (int i = 0; i < 7; i++)
+            //{
+            //    var t = new Task(() =>
+            //    {
+            //        var pop3 = CreatePop3Client();
+            //        pop3Client.Authenticate();
+            //        for (var j = current; j < current + countPerThread; j++)
+            //        {
+            //            messages.Add(pop3.GetMessage(j));
+            //        }
+
+            //        pop3.Close();
+            //    });
+            //    t.Start();
+            //    tasks.Add(t);
+            //    current += countPerThread;
+            //}
+
+            //if (off > 0)
+            //{
+            //    var t = new Task(() =>
+            //    {
+            //        var pop3 = CreatePop3Client();
+            //        pop3Client.Authenticate();
+            //        for (var j = current; j < current + off - 1; j++)
+            //        {
+            //            messages.Add(pop3.GetMessage(j));
+            //        }
+
+            //        pop3.Close();
+            //    });
+            //    t.Start();
+            //    tasks.Add(t);
+            //}
+            //Task.WaitAll(tasks.ToArray());
 
             return messages;
         }
@@ -114,9 +158,7 @@ namespace fMailer.Web.Controllers.Domain
             }
 
             var smtpClient = CreateSmtpClient();
-            var sendTask = new Task(() => smtpClient.SendMailList(allMessages));
-            sendTask.Start();
-            sendTask.Wait();
+            smtpClient.SendMailList(allMessages);
         }
 
         private void UpdateRepliesAndFails(IList<MailMessage> messages)
@@ -134,20 +176,25 @@ namespace fMailer.Web.Controllers.Domain
 
                 foreach (var recipient in recipients)
                 {
-                    if (distribution.Replies.FirstOrDefault(x => x.From.Equals(recipient)) != null)
-                    {
-                        continue;
-                    }
 
                     var message = messages
                                     .FirstOrDefault(x => x.From.Contains(recipient.Email) && 
                                                          IsSubjectReply(GetCompleteText(recipient, distribution.Template.Subject), x.Subject));
                     if (message != null)
                     {
+                        if (distribution.Replies.FirstOrDefault(x => x.From.Equals(recipient)) != null)
+                        {
+                            continue;
+                        }
+
                         distribution.AddReply(CreateReplyFromMail(message, recipient));
                     }
                     else
                     {
+                        if (distribution.FailedDeliveries.FirstOrDefault(x => x.To.Equals(recipient)) != null)
+                        {
+                            continue;
+                        }
                         var failedMessage = messages.FirstOrDefault(x => IsSubjectDeliveryFailed(x.Subject) && x.BodyText.Contains(recipient.Email));
                         if (failedMessage != null)
                         {
@@ -161,7 +208,7 @@ namespace fMailer.Web.Controllers.Domain
         private bool IsSubjectDeliveryFailed(string inboxSubject)
         {
             var lowerInbox = inboxSubject.ToLower();
-            return lowerInbox.Contains("delivey") && lowerInbox.Contains("failed");
+            return lowerInbox.Contains("delivery") && lowerInbox.Contains("failed");
         }
 
         private bool IsSubjectReply(string originalSubject, string inboxSubject)
@@ -169,6 +216,7 @@ namespace fMailer.Web.Controllers.Domain
             var lowerOriginal = originalSubject.ToLower();
             var lowerInbox = inboxSubject.ToLower();
             return "re: " + lowerOriginal == lowerInbox ||
+                   "re:" + lowerOriginal == lowerInbox ||
                    lowerOriginal == lowerInbox ||
                    lowerInbox.Contains(lowerOriginal);
         }
@@ -176,6 +224,7 @@ namespace fMailer.Web.Controllers.Domain
         private SmtpMessage CreateMail(Contact contact, MailTemplate template)
         {
             var message = new SmtpMessage();
+            message.ContentEncoding = Encoding.UTF8;
             message.Subject = GetCompleteText(contact, template.Subject);
             message.BodyText = GetCompleteText(contact, template.Text);
             foreach (var attachment in template.Attachments)
@@ -234,10 +283,23 @@ namespace fMailer.Web.Controllers.Domain
 
         private Reply CreateReplyFromMail(MailMessage message, Contact from)
         {
+            string body = message.BodyText;
+            if (message.IsHtml)
+            {
+                RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+                Regex regx = new Regex("<body.*?>(?<theBody>.*)</body>", options);
+                Match match = regx.Match(body);
+
+                if (match.Success)
+                {
+                    body = match.Groups["theBody"].Value;
+                }
+            }
+
             return new Reply
             {
                 From = from,
-                EmailText = message.BodyText,
+                EmailText = body,
                 RecievedOn = DateTime.Now,
                 Subject = message.Subject,
                 IsNew = true

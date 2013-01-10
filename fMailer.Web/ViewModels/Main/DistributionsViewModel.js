@@ -100,7 +100,7 @@ function DistributionsViewModel()
         {
             distributionsService.call(
                 "MarkReplyAsRead",
-                { reply: unwrapObs(reply) },
+                { reply: { Id: reply.Id() } },
                 function (response)
                 {
                     reply.IsNew(false);
@@ -184,7 +184,7 @@ function DistributionsViewModel()
         $("#distrModal").modal(options);
     };
 
-    self.loadDistrs();
+    self.loadDistrsWP();
     self.loadContacts();
     self.loadGroups();
     self.loadTemplates();

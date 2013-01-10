@@ -54,7 +54,7 @@
 <div id="loadingModal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 60000">
     <div class="modal-body">
         <div>
-            Downloading <i>distributions</i>. This operation may take some time.<br />
+            Updating <i>distributions</i> data. This operation may take some time.<br />
             Please wait...
         </div>
         <div class="progress progress-striped active" style="height: 4px; margin: 0px 0px 5px 0px;">
@@ -91,7 +91,7 @@
 
 <div class="row-fluid">
     <div class="accordion" id="accordion" data-bind="foreach: distrs">
-        <div class="accordion-group" style="border-bottom: 1px solid lightgray;">
+        <div class="accordion-group" style="border-top: 1px solid lightgray;">
             <div class="accordion-heading">
                 <div class="row-fluid">
                     <div class="span1 hidden-phone">
@@ -120,7 +120,7 @@
                             <span class="label" data-bind="visible: IsClosed()">Closed!</span>
                         </h3>
                         <div>Replies: <span class="text-info" data-bind="text: Replies().length"></span></div>
-                        <div>Failed: <span class="text-error" data-bind="text: FailedDeliveredContancts().length"></span></div>
+                        <div>Failed: <span class="text-error" data-bind="text: FailedDeliveries().length"></span></div>
                     </div>
                 </div>
             </div>
@@ -158,8 +158,8 @@
                             <div data-bind="foreach: FailedDeliveries">
                                 <div>
                                     <i class="icon-remove-sign" data-bind="visible: IsNew()"></i>
-                                    <span><a href="#" data-bind="click: showReply">Show reply</a></span>
-                                    <span>|</span>
+                                    @*<span><a href="#" data-bind="click: showReply">Show failed</a></span>
+                                    <span>|</span>*@
                                     <span data-bind="with: To">
                                         <span data-bind="text: LastName"></span>
                                         <span data-bind="text: FirstName"></span>
