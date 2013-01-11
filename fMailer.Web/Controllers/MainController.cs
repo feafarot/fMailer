@@ -49,6 +49,11 @@ namespace fMailer.Web.Controllers
             ViewBag.IsSuccess = true;
 
             User.Settings.Username = model.Username;
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                User.Settings.Password = model.Password;
+            }
+
             User.Settings.Password = model.Password;
             User.Settings.EmailAddressFrom = model.EmailAddressFrom;
             User.Settings.Signature = model.Signature;

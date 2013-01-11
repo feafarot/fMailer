@@ -19,8 +19,9 @@ using fMailer.Web.Core;
 using fMailer.Web.Core.HashProviders;
 using fMailer.Web.Core.Settings;
 using HigLabo.Net.Mail;
-using HigLabo.Net.Pop3;
 using HigLabo.Net.Smtp;
+using OpenPop.Mime;
+using OpenPop.Pop3;
 
 namespace fMailer.Web.Controllers.Domain
 {
@@ -79,65 +80,53 @@ namespace fMailer.Web.Controllers.Domain
             return Json(true);
         }
 
-        private List<MailMessage> LoadMessages()
+        private List<System.Net.Mail.MailMessage> LoadMessages()
         {
-            var messages = new List<MailMessage>();
             var pop3Client = CreatePop3Client();
-            if (!pop3Client.Authenticate())
+            var count = pop3Client.GetMessageCount();
+
+            var threadsCount = 4;
+            var messages = new Dictionary<int, Message>();
+            var countPerThread = count / threadsCount;
+            var tasks = new List<Task>();
+            var current = 1;
+            var off = count % threadsCount;
+            for (int i = 0; i < threadsCount; i++)
             {
-                Debug.WriteLine("POP3 authentification failed");
-                return messages;
+                var contextThread = i;
+                var contextCurrent = current;
+                var t = new Task(() =>
+                {
+                    var pop3 = CreatePop3Client();
+                    for (var j = contextCurrent; j < contextCurrent + countPerThread; j++)
+                    {
+                        var msg = pop3.GetMessage(j);
+                        messages.Add(j, msg);
+                    }
+
+                    pop3.Disconnect();
+                });
+                t.Start();
+                tasks.Add(t);
+                current += countPerThread;
             }
 
-            var count = pop3Client.GetTotalMessageCount();
-            for (int i = 1; i < count; i++)
+            if (off > 0)
             {
-                messages.Add(pop3Client.GetMessage(i));
+                var pop3 = CreatePop3Client();
+                for (var j = current; j < current + off; j++)
+                {
+                    var msg = pop3.GetMessage(j);
+                    messages.Add(j, msg);
+                }
+
+                pop3.Disconnect();
+
             }
 
-            pop3Client.Close();
+            Task.WaitAll(tasks.ToArray());
 
-            //var countPerThread = count / 7;
-            //var tasks = new List<Task>();
-            //var current = 1L;
-            //var off = count % 7;
-            //for (int i = 0; i < 7; i++)
-            //{
-            //    var t = new Task(() =>
-            //    {
-            //        var pop3 = CreatePop3Client();
-            //        pop3Client.Authenticate();
-            //        for (var j = current; j < current + countPerThread; j++)
-            //        {
-            //            messages.Add(pop3.GetMessage(j));
-            //        }
-
-            //        pop3.Close();
-            //    });
-            //    t.Start();
-            //    tasks.Add(t);
-            //    current += countPerThread;
-            //}
-
-            //if (off > 0)
-            //{
-            //    var t = new Task(() =>
-            //    {
-            //        var pop3 = CreatePop3Client();
-            //        pop3Client.Authenticate();
-            //        for (var j = current; j < current + off - 1; j++)
-            //        {
-            //            messages.Add(pop3.GetMessage(j));
-            //        }
-
-            //        pop3.Close();
-            //    });
-            //    t.Start();
-            //    tasks.Add(t);
-            //}
-            //Task.WaitAll(tasks.ToArray());
-
-            return messages;
+            return messages.OrderByDescending(x => x.Key).Select(x => x.Value.ToMailMessage()).ToList();
         }
 
         private void ProcessDistribution(Distribution distribution)
@@ -161,7 +150,7 @@ namespace fMailer.Web.Controllers.Domain
             smtpClient.SendMailList(allMessages);
         }
 
-        private void UpdateRepliesAndFails(IList<MailMessage> messages)
+        private void UpdateRepliesAndFails(IList<System.Net.Mail.MailMessage> messages)
         {
             foreach (var distribution in User.Distributions.Where(x => !x.IsClosed))
             {
@@ -178,7 +167,7 @@ namespace fMailer.Web.Controllers.Domain
                 {
 
                     var message = messages
-                                    .FirstOrDefault(x => x.From.Contains(recipient.Email) && 
+                                    .FirstOrDefault(x => x.From.Address.Contains(recipient.Email) && 
                                                          IsSubjectReply(GetCompleteText(recipient, distribution.Template.Subject), x.Subject));
                     if (message != null)
                     {
@@ -195,7 +184,7 @@ namespace fMailer.Web.Controllers.Domain
                         {
                             continue;
                         }
-                        var failedMessage = messages.FirstOrDefault(x => IsSubjectDeliveryFailed(x.Subject) && x.BodyText.Contains(recipient.Email));
+                        var failedMessage = messages.FirstOrDefault(x => IsSubjectDeliveryFailed(x.Subject) && x.Body.Contains(recipient.Email));
                         if (failedMessage != null)
                         {
                             distribution.AddDeliveryFailed(CreateFailedDeliveryFromMail(failedMessage, recipient));
@@ -225,6 +214,7 @@ namespace fMailer.Web.Controllers.Domain
         {
             var message = new SmtpMessage();
             message.ContentEncoding = Encoding.UTF8;
+            message.ContentTransferEncoding = TransferEncoding.Base64;
             message.Subject = GetCompleteText(contact, template.Subject);
             message.BodyText = GetCompleteText(contact, template.Text);
             foreach (var attachment in template.Attachments)
@@ -258,12 +248,9 @@ namespace fMailer.Web.Controllers.Domain
         private Pop3Client CreatePop3Client()
         {
             var settings = User.Settings;
-            var pop3Client = new Pop3Client(
-                settings.Pop3Address, 
-                settings.Pop3Prot.Value, 
-                settings.IsGmail ? "recent:" + settings.Username : settings.Username, 
-                settings.Password);
-            pop3Client.Ssl = settings.Pop3UseSsl;
+            var pop3Client = new Pop3Client();
+            pop3Client.Connect(settings.Pop3Address, settings.Pop3Prot.Value, settings.Pop3UseSsl);
+            pop3Client.Authenticate(settings.IsGmail ? "recent:" + settings.Username : settings.Username, settings.Password);
             return pop3Client;
         }
 
@@ -281,37 +268,24 @@ namespace fMailer.Web.Controllers.Domain
                            .Trim();
         }
 
-        private Reply CreateReplyFromMail(MailMessage message, Contact from)
+        private Reply CreateReplyFromMail(System.Net.Mail.MailMessage message, Contact from)
         {
-            string body = message.BodyText;
-            if (message.IsHtml)
-            {
-                RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
-                Regex regx = new Regex("<body.*?>(?<theBody>.*)</body>", options);
-                Match match = regx.Match(body);
-
-                if (match.Success)
-                {
-                    body = match.Groups["theBody"].Value;
-                }
-            }
-
             return new Reply
             {
                 From = from,
-                EmailText = body,
+                EmailText = message.Body,
                 RecievedOn = DateTime.Now,
                 Subject = message.Subject,
                 IsNew = true
             };
         }
 
-        private FailedDelivery CreateFailedDeliveryFromMail(MailMessage message, Contact to)
+        private FailedDelivery CreateFailedDeliveryFromMail(System.Net.Mail.MailMessage message, Contact to)
         {
             return new FailedDelivery
             {
                 To = to,
-                EmailText = message.BodyText,
+                EmailText = message.Body,
                 Subject = message.Subject,
                 IsNew = true
             };
