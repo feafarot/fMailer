@@ -1,5 +1,5 @@
 ﻿// ------------------------------------------------------------------------
-// <copyright file="AttachmentMapping .cs" company="feafarot">
+// <copyright file="ReplyAttachmentMapping .cs" company="feafarot">
 //   Copyright © 2012 feafarot
 // </copyright>
 // ------------------------------------------------------------------------
@@ -10,9 +10,9 @@ namespace fMailer.Domain.ModelMappings
     using FluentNHibernate.Mapping;
     using fMailer.Domain.Model;
 
-    public class AttachmentMapping : ClassMap<Attachment>
+    public class ReplyAttachmentMapping : ClassMap<ReplyAttachment>
     {
-        public AttachmentMapping()
+        public ReplyAttachmentMapping()
         {
             Id(x => x.Id);
 
@@ -21,7 +21,7 @@ namespace fMailer.Domain.ModelMappings
             Map(x => x.Size).Not.Nullable();
             Map(x => x.Name).Not.Nullable();
 
-            References(x => x.ParentTemplate).Cascade.SaveUpdate();
+            References(x => x.ParentReply).Cascade.All();
         }
     }
 }

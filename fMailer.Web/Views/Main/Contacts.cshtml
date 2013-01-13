@@ -10,7 +10,7 @@
         <h3 id="contactsModalLabel" data-bind="text: modalHeader">
         </h3>
     </div>
-    <div class="modal-body" style="max-height: 500px;" data-bind="">
+    <div class="non-relative modal-body" style="max-height: 500px;" data-bind="">
         <!-- ko with: currentContact -->
         <input type="text" class="input-block-level" placeholder="Email" data-bind="value: Email" required maxlength="250" />
         <input type="text" class="input-block-level" placeholder="First name" data-bind="value: FirstName" required maxlength="250" />
@@ -19,8 +19,8 @@
         <p style="margin-bottom: 8px;">
             Groups:&nbsp;
             <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
-            <span data-bind="foreach: Groups" >
-                <span class="label label-info">#<span data-bind="text: Name"></span><button class="close close-inlabel" data-bind="click: removeGroup">x</button></span>
+            <span data-bind="foreach: Groups">
+                <span class="label label-info">#<span data-bind="text: Name"></span><a class="close close-inlabel" data-bind="click: removeGroup">&times;</a></span>
             </span>
         </p>
         <!-- /ko -->
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div id="loadingModal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 60000">
+<div id="loadingModal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1059">
     <div class="modal-body">
         <div>
             Importing contacts...
@@ -85,14 +85,29 @@
     </span>
     <span class="fileupload-preview"></span>
     <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
-    <button class="btn btn-info btn-small" title="Import contacts" data-bind="click: importContacts">
+    <button class="btn btn-info btn-small" title="Import contacts" data-bind="click: importContacts, enable: imageFile">
         Import contacts
+    </button>
+    &nbsp;
+    <div class="btn-group">
+        <button class="btn btn-small" data-bind="text: currentFilter">No filter</button>
+        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" data-bind="foreach: allGroups">
+            <li>
+                <a href="#" data-bind="text: Name, click: applyFilter"></a>
+            </li>
+        </ul>
+    </div>
+    <button class="btn btn-small" data-bind="click: clearFilter">
+        Clear filter
     </button>
 </div>
 
 <div class="row-fluid">
     <table class="table table-hover">
-        <tbody data-bind="foreach: contacts">
+        <tbody data-bind="foreach: contactsToShow">
             <tr>
                 <td>
                     <div class="row-fluid">

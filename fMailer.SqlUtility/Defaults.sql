@@ -6,6 +6,7 @@ INSERT INTO[Settings]
            ,[Username]
            ,[Password]
            ,[Pop3Address]
+           ,[Pop3IsGmail]
            ,[Pop3Prot]
            ,[Pop3UseSsl]
            ,[SmtpAddress]
@@ -19,27 +20,26 @@ INSERT INTO[Settings]
            ,'sly.feafarot@gmail.com'
            ,''
            ,'pop.gmail.com'
+           ,1
            ,995
            ,1
            ,'smtp.gmail.com'
-           ,465
+           ,587
            ,587
            ,1
            ,1)
-INSERT INTO [User] ([Id], [Login], [Password], [Email])
-VALUES (1, 'admin', 'root', 'sly.feafarot@gmail.com');
-
+INSERT INTO [User] ([Id], [Login], [Password])
+VALUES (1, 'admin', 'root' );
 GO
 
 INSERT INTO [ContactsGroup] ([Name], [UserId])
-VALUES ('UA-Analyze', 1), 
-       ('Framework', 1), 
-       ('Winter School', 1), 
-       ('KTURE main', 1);
-       
+VALUES ('Administrators', 1);
+GO
+
 INSERT INTO [Contact] ([FirstName], [LastName], [MiddleName], [Email], [UserId])
-VALUES ('Roman', 'Konkin', 'Vladimirovich', 'sly.feafarot@gmail.com', 1),
-       ('Ivan', 'Vasiliy', 'Ivanov', 'ivianov@test.ml', 1);
-       
+VALUES ('Roman', 'Konkin', 'Vladimirovich', 'sly.feafarot@gmail.com', 1);
+GO
+
 INSERT INTO [ContactsToGroups] ([ContactId], [ContactsGroupId])
-VALUES (1, 1), (1, 2);
+VALUES (1, 1);
+GO

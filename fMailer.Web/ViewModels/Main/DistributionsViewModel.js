@@ -93,28 +93,49 @@ function DistributionsViewModel()
         }
     };
 
-    self.currentReply = ko.observable({ Subject: "", EmailText: "" });
+
+    // Reply view part
+    self.currentReply = ko.observable({ Id: 0, Subject: "", EmailText: "", Attachments: ko.observableArray([]) });
+    self.replyLoading = ko.observable(false);
     self.showReply = function (reply)
     {
-        if (reply.IsNew())
-        {
-            distributionsService.call(
-                "MarkReplyAsRead",
-                { reply: { Id: reply.Id() } },
-                function (response)
-                {
-                    reply.IsNew(false);
-                });
-        }
-        
-        self.currentReply(reply);
-        $("#replyModal").modal("show");
+        self.replyLoading(true);
+        distributionsService.call(
+            "LoadReply",
+            { replyId: reply.Id() },
+            function (response)
+            {
+                reply.IsNew(false);
+                self.currentReply(reply);
+                $("#replyModal").modal("show");
+                self.replyLoading(false);
+            });
     };
     self.closeReply = function ()
     {
+        self.currentReply({ Id: 0, Subject: "", EmailText: "", Attachments: ko.observableArray([]) });
         $("#replyModal").modal("toggle");
     };
 
+    // Failed part
+    self.currentFailed = ko.observable({ Subject: "", EmailText: "" });
+    self.showFailed = function (failed)
+    {
+        self.replyLoading(true);
+        distributionsService.call(
+            "MarkFailAsRead",
+            { failedId: failed.Id() },
+            function (response)
+            {
+                failed.IsNew(false);
+            });
+        self.currentFailed(failed);
+        $("#failedModal").modal("show");
+    };
+    self.closeFailed = function () {
+        self.currentFailed({ Subject: "", EmailText: "" });
+        $("#failedModal").modal("toggle");
+    };
 
     // Main part
     self.clearDistr = { Id: 0, Name: "", Contacts: ko.observableArray([]), Groups: ko.observableArray([]), Template: { Id: 0, Name: "" } };

@@ -27,14 +27,15 @@ function htmlDecode(value)
     return $('<div/>').html(value).text();
 }
 
-function getLocation(isLocal)
+function getLocation()
 {
+    var isLocal = true;
     return isLocal ? window.location.protocol + "//" + window.location.hostname + "/fmailer" : window.location.protocol + "//" + window.location.hostname;
 }
 
 function navigate(url)
 {
-    window.location.href = getLocation(true) + "/" + url;
+    window.location.href = getLocation() + "/" + url;
 }
 
 function _(property)

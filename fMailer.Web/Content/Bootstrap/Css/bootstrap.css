@@ -7041,7 +7041,7 @@ button.close {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 1000;
+  z-index: 1055;
   display: none;
   float: left;
   min-width: 160px;
@@ -7201,7 +7201,7 @@ button.close {
   padding-right: 20px;
 }
 .typeahead {
-  z-index: 1051;
+  z-index: 1056;
   margin-top: 2px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;

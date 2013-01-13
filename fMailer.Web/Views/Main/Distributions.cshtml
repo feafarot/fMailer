@@ -11,7 +11,7 @@
             New Distribution
         </h3>
     </div>
-    <div class="modal-body" style="max-height: 500px;">
+    <div class="modal-body non-relative" style="max-height: 500px;">
         <!-- ko with: currentDistr -->
         <input type="text" class="input-block-level" placeholder="Name" data-bind="value: Name" required maxlength="250" />
         <!-- /ko -->
@@ -23,7 +23,7 @@
         <p style="margin-bottom: 8px;">
             <span data-bind="visible: Contacts().length < 1" class="muted">No contacts</span>
             <span data-bind="foreach: Contacts" >
-                <span class="label label-info">#<span data-bind="text: Email"></span><button class="close close-inlabel" data-bind="click: removeContact">x</button></span>
+                <span class="label label-info">#<span data-bind="text: Email"></span><a class="close close-inlabel" data-bind="click: removeContact">&times;</a></span>
             </span>
         </p>
         <!-- /ko -->
@@ -34,7 +34,7 @@
         <p style="margin-bottom: 8px;">
             <span data-bind="visible: Groups().length < 1" class="muted">No groups</span>
             <span data-bind="foreach: Groups" >
-                <span class="label label-info">#<span data-bind="text: Name"></span><button class="close close-inlabel" data-bind="click: removeGroup">x</button></span>
+                <span class="label label-info">#<span data-bind="text: Name"></span><a class="close close-inlabel" data-bind="click: removeGroup">&times;</a></span>
             </span>
         </p>
         <!-- /ko -->
@@ -63,16 +63,35 @@
     </div>
 </div>
 
-<div id="replyModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true" style="z-index: 60000">
+<div id="replyModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
     <div class="modal-header" data-bind="with: currentReply">
         <h4 id="replyModalLabel"> <span data-bind="text: Subject"></span></h4>
     </div>
     <div class="modal-body" data-bind="with: currentReply">
+        <span data-bind="visible: Attachments().length < 1" class="muted">No attachments</span>
+        <div data-bind="foreach: Attachments">
+            <span><a data-bind="text: Name() + ' ' + '(' + Size() + ' bytes)', attr: { href: getLocation() + '/DistributionsDomain/LoadAttachment/' + Id() }"></a></span>
+        </div>
+        <hr />
         <div data-bind="html: EmailText">
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-info" data-bind="click: closeReply">Close</button>
+        <span class="label label-warning" data-bind="visible: replyLoading()">Reply is loading, please wait...</span>
+        <button class="btn btn-info" data-bind="click: closeReply, enable: !replyLoading()">Close</button>
+    </div>
+</div>
+
+<div id="failedModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="failedModalLabel" aria-hidden="true">
+    <div class="modal-header" data-bind="with: currentFailed">
+        <h4 id="failedModalLabel"> <span data-bind="text: Subject"></span></h4>
+    </div>
+    <div class="modal-body" data-bind="with: currentFailed">
+        <div data-bind="html: EmailText">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info" data-bind="click: closeFailed">Close</button>
     </div>
 </div>
 
@@ -158,8 +177,8 @@
                             <div data-bind="foreach: FailedDeliveries">
                                 <div>
                                     <i class="icon-remove-sign" data-bind="visible: IsNew()"></i>
-                                    @*<span><a href="#" data-bind="click: showReply">Show failed</a></span>
-                                    <span>|</span>*@
+                                    <span><a href="#" data-bind="click: showFailed">Show failed</a></span>
+                                    <span>|</span>
                                     <span data-bind="with: To">
                                         <span data-bind="text: LastName"></span>
                                         <span data-bind="text: FirstName"></span>

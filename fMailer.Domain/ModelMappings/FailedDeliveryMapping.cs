@@ -15,7 +15,7 @@ namespace fMailer.Domain.ModelMappings
         {
             Id(x => x.Id);
 
-            Map(x => x.EmailText).Not.Nullable().CustomSqlType("nvarchar(MAX)");
+            Map(x => x.EmailText).Not.Nullable().CustomSqlType("nvarchar(MAX)").Length(int.MaxValue);
             Map(x => x.IsNew).Not.Nullable().Default("1");
             Map(x => x.Subject).Not.Nullable();
 

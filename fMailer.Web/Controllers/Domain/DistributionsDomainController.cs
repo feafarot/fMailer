@@ -4,24 +4,22 @@
 // </copyright>
 // ------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using fMailer.Domain.DataAccess;
 using fMailer.Domain.Model;
 using fMailer.Web.Core;
-using fMailer.Web.Core.HashProviders;
 using fMailer.Web.Core.Settings;
-using HigLabo.Net.Mail;
-using HigLabo.Net.Smtp;
 using OpenPop.Mime;
 using OpenPop.Pop3;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Attachment = fMailer.Domain.Model.Attachment;
 
 namespace fMailer.Web.Controllers.Domain
 {
@@ -33,10 +31,32 @@ namespace fMailer.Web.Controllers.Domain
         }
 
         [HttpPost]
-        public JsonResult MarkReplyAsRead(Reply reply)
+        public JsonResult LoadReply(int replyId)
         {
-            var realReply = Repository.GetById<Reply>(reply.Id);
-            realReply.IsNew = false;
+            var realReply = Repository.GetById<Reply>(replyId);
+            if (realReply.IsNew)
+            {
+                realReply.IsNew = false;
+            }
+
+            return Json(realReply);
+        }
+
+        [HttpGet]
+        public FileContentResult LoadAttachment(int id)
+        {
+            var attachment = Repository.GetById<ReplyAttachment>(id);
+            return new FileContentResult(attachment.Content, attachment.ContentType) { FileDownloadName = attachment.Name };
+        }
+
+        public JsonResult MarkFailAsRead(int failedId)
+        {
+            var fail = Repository.GetById<FailedDelivery>(failedId);
+            if (fail.IsNew)
+            {
+                fail.IsNew = false;
+            }
+
             return Json(true);
         }
 
@@ -57,13 +77,13 @@ namespace fMailer.Web.Controllers.Domain
                 UpdateRepliesAndFails(messages);
             }
 
-            return Json(User.Distributions.OrderByDescending(x => x.Id));
+            return Json(User.Distributions.OrderByDescending(x => x.Id).Select(x => x.GetLightClone()));
         }
 
         [HttpPost]
         public JsonResult LoadDistributionsWithoutProcessing()
         {
-            return Json(User.Distributions.OrderByDescending(x => x.Id));
+            return Json(User.Distributions.OrderByDescending(x => x.Id).Select(x => x.GetLightClone()));
         }
 
         [HttpPost]
@@ -80,7 +100,7 @@ namespace fMailer.Web.Controllers.Domain
             return Json(true);
         }
 
-        private List<System.Net.Mail.MailMessage> LoadMessages()
+        private List<MailMessage> LoadMessages()
         {
             var pop3Client = CreatePop3Client();
             var count = pop3Client.GetMessageCount();
@@ -126,7 +146,22 @@ namespace fMailer.Web.Controllers.Domain
 
             Task.WaitAll(tasks.ToArray());
 
-            return messages.OrderByDescending(x => x.Key).Select(x => x.Value.ToMailMessage()).ToList();
+            return messages.OrderByDescending(x => x.Key).Select(x => GetMailMessageFromMessage(x.Value)).ToList();
+        }
+
+        private MailMessage GetMailMessageFromMessage(Message msg)
+        {
+            var mailMessage = msg.ToMailMessage();
+            mailMessage.Attachments.Clear();
+
+            var attachParts = msg.FindAllAttachments();
+            foreach (var part in attachParts)
+            {
+                var attachment = new System.Net.Mail.Attachment(new MemoryStream(part.Body), part.FileName, part.ContentType.MediaType);
+                mailMessage.Attachments.Add(attachment);
+            }
+            
+            return mailMessage;
         }
 
         private void ProcessDistribution(Distribution distribution)
@@ -140,14 +175,14 @@ namespace fMailer.Web.Controllers.Domain
                 }
             }
 
-            var allMessages = new List<SmtpMessage>();
+            var smtpClient = CreateSmtpClient();
+            var allMessages = new List<MailMessage>();
             foreach (var recipient in recipients)
             {
-                allMessages.Add(CreateMail(recipient, distribution.Template));
+                var email = CreateMail(recipient, distribution.Template);
+                allMessages.Add(email);
+                smtpClient.Send(email);
             }
-
-            var smtpClient = CreateSmtpClient();
-            smtpClient.SendMailList(allMessages);
         }
 
         private void UpdateRepliesAndFails(IList<System.Net.Mail.MailMessage> messages)
@@ -207,28 +242,29 @@ namespace fMailer.Web.Controllers.Domain
             return "re: " + lowerOriginal == lowerInbox ||
                    "re:" + lowerOriginal == lowerInbox ||
                    lowerOriginal == lowerInbox ||
-                   lowerInbox.Contains(lowerOriginal);
+                   lowerInbox.Contains(lowerOriginal) ||
+                   "re:" + lowerOriginal.Replace(" ", "") == lowerInbox.Replace(" ", "");
         }
 
-        private SmtpMessage CreateMail(Contact contact, MailTemplate template)
+        private MailMessage CreateMail(Contact contact, MailTemplate template)
         {
-            var message = new SmtpMessage();
-            message.ContentEncoding = Encoding.UTF8;
-            message.ContentTransferEncoding = TransferEncoding.Base64;
+            var message = new MailMessage();
+            
             message.Subject = GetCompleteText(contact, template.Subject);
-            message.BodyText = GetCompleteText(contact, template.Text);
+            message.SubjectEncoding = Encoding.UTF8;
+
+            message.Body = GetCompleteText(contact, template.Text);
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+
             foreach (var attachment in template.Attachments)
             {
-                var smtpContent = new SmtpContent();
-                smtpContent.ContentType.Value = attachment.ContentType;
-                smtpContent.ContentType.Name = attachment.Name;
-                smtpContent.ContentDisposition.FileName = attachment.Name;
-                smtpContent.LoadData(attachment.Content);
-                message.Contents.Add(smtpContent);
+                var stream = new MemoryStream(attachment.Content);
+                var mailAttachment = new System.Net.Mail.Attachment(stream, attachment.Name, attachment.ContentType);
+                message.Attachments.Add(mailAttachment);
             }
 
-            message.IsHtml = true;
-            message.From = User.Settings.Username;
+            message.From = new MailAddress(User.Settings.EmailAddressFrom);
             message.To.Add(new MailAddress(contact.Email));
             return message;
         }
@@ -236,12 +272,16 @@ namespace fMailer.Web.Controllers.Domain
         private SmtpClient CreateSmtpClient()
         {
             var settings = User.Settings;
-            var smtpClient = new SmtpClient(
-                settings.SmtpAddress, 
-                settings.SmtpUseSsl ? settings.SmtpSslPort.Value : settings.SmtpTlsPort.Value, 
-                settings.Username, 
-                settings.Password);
-            smtpClient.Ssl = settings.SmtpUseSsl;
+            var smtpClient = new SmtpClient
+            {
+                Host = settings.SmtpAddress,
+                Port = settings.SmtpUseSsl ? settings.SmtpSslPort.Value : settings.SmtpTlsPort.Value,
+                EnableSsl = settings.SmtpUseSsl,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Timeout = 100000,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(settings.Username, settings.Password)
+            };
             return smtpClient;
         }
 
@@ -250,7 +290,7 @@ namespace fMailer.Web.Controllers.Domain
             var settings = User.Settings;
             var pop3Client = new Pop3Client();
             pop3Client.Connect(settings.Pop3Address, settings.Pop3Prot.Value, settings.Pop3UseSsl);
-            pop3Client.Authenticate(settings.IsGmail ? "recent:" + settings.Username : settings.Username, settings.Password);
+            pop3Client.Authenticate(settings.Pop3IsGmail ? "recent:" + settings.Username : settings.Username, settings.Password);
             return pop3Client;
         }
 
@@ -270,7 +310,7 @@ namespace fMailer.Web.Controllers.Domain
 
         private Reply CreateReplyFromMail(System.Net.Mail.MailMessage message, Contact from)
         {
-            return new Reply
+            var reply = new Reply
             {
                 From = from,
                 EmailText = message.Body,
@@ -278,6 +318,12 @@ namespace fMailer.Web.Controllers.Domain
                 Subject = message.Subject,
                 IsNew = true
             };
+            foreach (var mailAttachment in message.Attachments)
+            {
+                reply.AddAttachment(CreateAttachment(mailAttachment));
+            }
+
+            return reply;
         }
 
         private FailedDelivery CreateFailedDeliveryFromMail(System.Net.Mail.MailMessage message, Contact to)
@@ -289,6 +335,14 @@ namespace fMailer.Web.Controllers.Domain
                 Subject = message.Subject,
                 IsNew = true
             };
+        }
+
+        private ReplyAttachment CreateAttachment(System.Net.Mail.Attachment mailAttachmetn)
+        {
+            var size = (int)mailAttachmetn.ContentStream.Length;
+            byte[] content = new byte[size];
+            mailAttachmetn.ContentStream.Read(content, 0, size);
+            return new ReplyAttachment { Name = mailAttachmetn.Name, Content = content, ContentType = mailAttachmetn.ContentType.MediaType, Size = size };
         }
     }
 }

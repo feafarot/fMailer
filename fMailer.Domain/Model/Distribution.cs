@@ -7,6 +7,7 @@
 namespace fMailer.Domain.Model
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Script.Serialization;
 
     public class Distribution : IUnique
@@ -49,6 +50,16 @@ namespace fMailer.Domain.Model
         {
             failed.Distribution = this;
             FailedDeliveries.Add(failed);
+        }
+
+        public virtual Distribution GetLightClone()
+        {
+            var clone = this.MemberwiseClone() as Distribution;
+            clone.Contacts = Contacts;
+            clone.Groups = Groups;
+            clone.FailedDeliveries = FailedDeliveries.OrderByDescending(x => x.IsNew).ToList();
+            clone.Replies = Replies.Select(x => x.Clone()).OrderByDescending(x => x.IsNew).ToList();
+            return clone;
         }
     }
 }

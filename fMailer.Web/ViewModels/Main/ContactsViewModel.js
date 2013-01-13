@@ -20,6 +20,7 @@ function ContactsViewModel()
         }
     };
     var options = { backdrop: "static", keyboard: false };
+    var noFilter = "#No filter";
 
     // Modal part
     self.isBusy = ko.observable(false);
@@ -66,6 +67,32 @@ function ContactsViewModel()
 
     // Main part
     self.contacts = ko.observableArray([]);
+    self.currentFilter = ko.observable(noFilter);
+    this.contactsToShow = ko.computed(function ()
+    {
+        if (self.currentFilter() == noFilter)
+        {
+            return self.contacts();
+        }
+
+        return ko.utils.arrayFilter(
+            self.contacts(),
+            function (contact)
+            {
+                var existedInCurrentConttact = contact.Groups.FirstOrDefault(null, "unwrapObs($).Name() === self.currentFilter()");
+                return existedInCurrentConttact != null;
+            });
+    },
+    this);
+    self.applyFilter = function (group)
+    {
+        self.currentFilter(group.Name());
+    };
+    self.clearFilter = function ()
+    {
+        self.currentFilter(noFilter);
+    };
+
     self.loadContacts = function ()
     {
         contactsService.call(

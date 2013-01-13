@@ -18,13 +18,13 @@
     <fieldset>
         <legend>Common</legend>
 
-        <div class="control-group">
+        @*<div class="control-group">
             @Html.LabelFor(model => model.Signature, new { @class = "control-label" })
             <div class="controls">
                 @Html.TextBoxFor(model => model.Signature)
                 @Html.ValidationMessageFor(model => model.Signature)
             </div>
-        </div>
+        </div>*@
 
         <div class="control-group">
             @Html.LabelFor(model => model.EmailAddressFrom, new { @class = "control-label" })
@@ -102,10 +102,10 @@
         <legend>POP3</legend>
 
         <div class="control-group">
-            @Html.LabelFor(model => model.IsGmail, new { @class = "control-label" })
+            @Html.LabelFor(model => model.Pop3IsGmail, new { @class = "control-label" })
             <div class="controls">
-                @Html.CheckBoxFor(model => model.IsGmail)
-                @Html.ValidationMessageFor(model => model.IsGmail)
+                @Html.CheckBoxFor(model => model.Pop3IsGmail)
+                @Html.ValidationMessageFor(model => model.Pop3IsGmail)
             </div>
         </div>
 

@@ -1,5 +1,4 @@
 email,firstname,lastname,middlename,groups
-feafarot@live.com,Roman,Ko,V,Framework
-asdasdqwe1231qwsaddas@ic.km.ua,Invalid1,Test,,fail
-asdfadfwear234@mail.ch.ua,Invalid2,Test,,fail
-fadsasdфыв@sdf.cm,Плохо,Неверно,,fail
+feafarot@live.com,Roman,Ko,V,Main;Test
+asdasdqwe1231qwsaddas@ic.km.ua,Неправильный,Пользователь,,Fail;Test
+asdfadfwear234@mail.ch.ua,Invalid,Test,Ut,Fail;Test
