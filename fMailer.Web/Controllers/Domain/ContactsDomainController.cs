@@ -31,6 +31,11 @@ namespace fMailer.Web.Controllers.Domain
         {
             if (contact.Id < 1)
             {
+                if (User.Contacts.Any(x => x.Email.ToLower() == contact.Email.ToLower()))
+                {
+                    return Json(false);
+                }
+
                 contact.Id = 0;
                 UpdateGroups(ref contact);
                 User.AddContact(contact);

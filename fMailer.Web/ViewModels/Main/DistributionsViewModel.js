@@ -150,6 +150,7 @@ function DistributionsViewModel()
             {
                 ko.mapping.fromJS(response, mapping, self.distrs);
                 $("#loadingModal").modal("toggle");
+                self.loadDistrsWP();
             });
     };
     self.loadDistrsWP = function ()
