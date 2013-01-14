@@ -56,3 +56,10 @@
 {
     position: static;
 }
+@-moz-document url-prefix() 
+{
+    .close.close-inlabel 
+    {
+        margin: -19px 0 0 3px;
+    }
+}
