@@ -24,7 +24,7 @@ function ContactsViewModel()
 
     // Modal part
     self.isBusy = ko.observable(false);
-    var clearContact = { FirstName: "", LastName: "", MiddleName: "", Email: "", Groups: ko.observableArray([]) };
+    var clearContact = { FirstName: "", LastName: "", MiddleName: "", Organization: "", Email: "", Groups: ko.observableArray([]) };
     self.currentContact = ko.observable(self.clearContact);
     self.selectedGroup = ko.observable({ Id: null, Name: "" });
     self.allGroups = ko.observableArray([]);
@@ -137,7 +137,7 @@ function ContactsViewModel()
     };
     self.createNewContact = function ()
     {
-        self.currentContact({ FirstName: "", LastName: "", MiddleName: "", Email: "", Groups: ko.observableArray([]) });
+        self.currentContact({ FirstName: "", LastName: "", MiddleName: "", Organization: "", Email: "", Groups: ko.observableArray([]) });
         self.contextGroups(self.allGroups.Select("$.Name()"));
         self.selectedGroup("");
         self.modalHeader("Create new contact");

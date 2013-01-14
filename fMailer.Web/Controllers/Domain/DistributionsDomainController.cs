@@ -301,6 +301,7 @@ namespace fMailer.Web.Controllers.Domain
                            .Replace(Settings.FirstNameKeyword, contact.FirstName)
                            .Replace(Settings.LastNameKeyword, contact.LastName)
                            .Replace(Settings.MiddleNameKeyword, contact.MiddleName)
+                           .Replace(Settings.OrganizationKeyword, contact.Organization)
                            .Replace(Settings.FullNameKeyword, 
                                     string.IsNullOrEmpty(contact.MiddleName) ?
                                         string.Format("{0} {1}", contact.LastName, contact.FirstName) :

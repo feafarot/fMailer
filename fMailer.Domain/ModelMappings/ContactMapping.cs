@@ -19,6 +19,7 @@ namespace fMailer.Domain.ModelMappings
             Map(x => x.FirstName).Not.Nullable();
             Map(x => x.LastName).Not.Nullable();
             Map(x => x.MiddleName);
+            Map(x => x.Organization);
 
             References(x => x.User).Not.Nullable().Cascade.SaveUpdate();
 

@@ -27,6 +27,8 @@ namespace fMailer.Domain.Model
 
         public virtual string Email { get; set; }
 
+        public virtual string Organization { get; set; }
+
         public virtual IList<ContactsGroup> Groups { get; set; }
 
         [ScriptIgnore]

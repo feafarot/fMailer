@@ -21,5 +21,7 @@ namespace fMailer.Web.Core.Settings
         string MiddleNameKeyword { get; }
 
         string FullNameKeyword { get; }
+
+        string OrganizationKeyword { get; }
     }
 }

@@ -42,6 +42,7 @@ namespace fMailer.Web.Controllers.Domain
                 realContact.FirstName = contact.FirstName;
                 realContact.LastName = contact.LastName;
                 realContact.MiddleName = contact.MiddleName;
+                realContact.Organization = contact.Organization;
                 realContact.Groups.Clear();
                 foreach (var item in contact.Groups)
                 {
@@ -92,7 +93,8 @@ namespace fMailer.Web.Controllers.Domain
                     Email = parts[indexes.Email],
                     FirstName = parts[indexes.FirstName],
                     LastName = parts[indexes.LastName],
-                    MiddleName = parts[indexes.MiddleName]
+                    MiddleName = parts[indexes.MiddleName],
+                    Organization = parts[indexes.Organization]
                 };                
                 if (User.Contacts.Any(x => x.Email == contact.Email))
                 {
@@ -170,6 +172,8 @@ namespace fMailer.Web.Controllers.Domain
 
             public int Grouops { get; set; }
 
+            public int Organization { get; set; }
+
             public static Indexes IndexString(string contact)
             {
                 var index = new Indexes();
@@ -179,6 +183,7 @@ namespace fMailer.Web.Controllers.Domain
                 index.LastName = parts.IndexOf("lastname");
                 index.MiddleName = parts.IndexOf("middlename");
                 index.Grouops = parts.IndexOf("groups");
+                index.Organization = parts.IndexOf("organization");
                 return index;
             }
         }
