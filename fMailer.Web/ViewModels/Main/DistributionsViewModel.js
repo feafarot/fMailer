@@ -50,20 +50,20 @@ function DistributionsViewModel()
     };
     self.addContact = function ()
     {
-        var existedInAllContacts = self.allContacts.FirstOrDefault(null, "$.Email() === self.selectedContact()");
+        var existedInAllContacts = self.allContacts.FirstOrDefault(null, "$.LastName() + ' ' + $.FirstName() === self.selectedContact()");
         var existedInContextContacts = self.contextContacts.FirstOrDefault(null, "$ === self.selectedContact()");
-        var existedInCurrentDistr = self.currentDistr().Contacts.FirstOrDefault(null, "unwrapObs($).Email === self.selectedContact()");
+        var existedInCurrentDistr = self.currentDistr().Contacts.FirstOrDefault(null, "unwrapObs($).LastName + ' ' + unwrapObs($).FirstName === self.selectedContact()");
 
         if (existedInAllContacts != null && existedInContextContacts != null)
         {
             self.currentDistr().Contacts.push(existedInAllContacts);
-            self.contextContacts.remove(existedInAllContacts.Email());
+            self.contextContacts.remove(existedInAllContacts.LastName() + " " + existedInAllContacts.FirstName());
         }
     };
     self.removeContact = function (contact)
     {
         self.currentDistr().Contacts.remove(contact);
-        self.contextContacts.push(unwrapObs(contact.Email));
+        self.contextContacts.push(unwrapObs(contact.LastName + " " + contact.FirstName));
     };
     self.submitDistr = function ()
     {
@@ -150,6 +150,7 @@ function DistributionsViewModel()
             {
                 ko.mapping.fromJS(response, mapping, self.distrs);
                 $("#loadingModal").modal("toggle");
+                self.loadDistrsWP();
             });
     };
     self.loadDistrsWP = function ()
@@ -198,7 +199,7 @@ function DistributionsViewModel()
     {
         self.currentDistr(self.clearDistr);
         self.contextGroups(self.allGroups.Select("$.Name()"));
-        self.contextContacts(self.allContacts.Select("$.Email()"));
+        self.contextContacts(self.allContacts.Select("$.LastName() + ' ' + $.FirstName()"));
         self.contextTemplates(self.templates.Select("$.Name()"));
         self.selectedGroup("");
         self.selectedContact("");

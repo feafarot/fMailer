@@ -50,6 +50,11 @@ namespace fMailer.Web.Controllers.Domain
             if (template.Id < 1)
             {
                 // New Item
+                if (User.Templates.Any(x => x.Name.ToLower() == template.Name.ToLower()))
+                {
+                    return Json(false);
+                }
+
                 template.UpdateAttachments();
                 User.AddTemplate(template);                
             }
@@ -74,7 +79,7 @@ namespace fMailer.Web.Controllers.Domain
                 }
             }
 
-            return Json(template.Id);
+            return Json(true);
         }
 
         [HttpPost]
