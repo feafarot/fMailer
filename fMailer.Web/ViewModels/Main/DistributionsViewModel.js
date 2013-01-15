@@ -149,13 +149,17 @@ function DistributionsViewModel()
             function (response)
             {
                 ko.mapping.fromJS(response, mapping, self.distrs);
-                $("#loadingModal").modal("toggle");
-                self.loadDistrsWP();
+                self.loadDistrsWP(true);
             });
     };
-    self.loadDistrsWP = function ()
+    self.loadDistrsWP = function (dontShowModal)
     {
-        $("#loadingModal").modal(options);
+        if (dontShowModal) { }
+        else
+        {
+            $("#loadingModal").modal(options);
+        }
+        
         distributionsService.call(
             "LoadDistributionsWithoutProcessing",
             null,

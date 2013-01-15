@@ -59,15 +59,7 @@
 
         public void CommitTransaction()
         {
-            if (session.Transaction.IsActive)
-            {
-                session.Transaction.Commit();
-                session.Transaction.Dispose();
-            }
-            else
-            {
-                Debug.WriteLine("There are no started transactions!");
-            }
+            Submit();
         }
 
         public void RollBackTransaction()
@@ -77,26 +69,43 @@
 
         public void Submit()
         {
-            if (session.Transaction != null && session.Transaction.IsActive)
+            try
             {
-                session.Transaction.Commit();
-                session.Transaction.Dispose();
+                if (session.Transaction != null && session.Transaction.IsActive)
+                {
+                    session.Transaction.Commit();
+                    session.Transaction.Dispose();
+                }
+                else
+                {
+                    Debug.WriteLine("There are no started transactions!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Debug.WriteLine("There are no started transactions!");
+                session.Transaction.Rollback();
+                throw ex;
             }
         }
 
         public void Dispose()
         {
-            if (session.Transaction != null && session.Transaction.IsActive)
+            try
             {
-                session.Transaction.Commit();
-                session.Transaction.Dispose();
-            }
+                if (session.Transaction != null && session.Transaction.IsActive)
+                {
+                    session.Transaction.Commit();
+                    session.Transaction.Dispose();
+                }
 
-            session.Dispose();
+                session.Dispose();
+            }
+            catch (Exception ex)
+            {
+                session.Transaction.Rollback();
+                session.Dispose();
+                throw ex;
+            }
         }
     }
 }

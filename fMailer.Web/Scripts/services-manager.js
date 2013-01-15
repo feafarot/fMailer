@@ -64,7 +64,7 @@ function callService(serviveLink, method, data, successCall, errorCall)
                 timersManager.closeAll();
                 if (textStatus != null)
                 {
-                    if (true)
+                    if (false)
                     {
                         var generator = window.open('', 'Server Error', 'width=1024,height=800,toolbar=no,location=yes,directories=yes,status=yes,menubar=no,scrollbars=yes,copyhistory=no,resizable=yes');
                         generator.document.write(jqXHR.responseText);

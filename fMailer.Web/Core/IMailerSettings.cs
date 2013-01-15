@@ -14,6 +14,8 @@ namespace fMailer.Web.Core.Settings
 
         bool UsePasswordsHashing { get; }
 
+        bool AllowMultipleLogins { get; }
+
         string FirstNameKeyword { get; }
 
         string LastNameKeyword { get; }

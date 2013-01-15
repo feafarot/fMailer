@@ -33,9 +33,12 @@ namespace fMailer.Web.Core
         public string BeginSession(int userId)
         {
             var sessions = repository.GetAll<Session>();
-            foreach (var session in sessions.Where(session => !session.Outdated && session.User.Id == userId))
+            if (!settings.AllowMultipleLogins)
             {
-                session.Outdated = true;
+                foreach (var session in sessions.Where(session => !session.Outdated && session.User.Id == userId))
+                {
+                    session.Outdated = true;
+                }
             }
 
             var user = repository.GetById<User>(userId);
