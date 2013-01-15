@@ -35,8 +35,7 @@ function baseService(service)
         {
             call: function (method, data, successCall, errorCall)
             {
-                // !TODO: BE CARE WITH DEPLOYMENT!!! in 'getLocation' method should be passed 'false' on real server.
-                callService(getLocation(true) + "/" + serviceName, method, data, successCall, errorCall);
+                callService(getLocation() + "/" + serviceName, method, data, successCall, errorCall);
             }
         };
 

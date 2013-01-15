@@ -201,7 +201,7 @@ function DistributionsViewModel()
     };
     self.createDistr = function ()
     {
-        self.currentDistr(self.clearDistr);
+        self.currentDistr({ Id: 0, Name: "", Contacts: ko.observableArray([]), Groups: ko.observableArray([]), Template: { Id: 0, Name: "" } });
         self.contextGroups(self.allGroups.Select("$.Name()"));
         self.contextContacts(self.allContacts.Select("$.LastName() + ' ' + $.FirstName()"));
         self.contextTemplates(self.templates.Select("$.Name()"));

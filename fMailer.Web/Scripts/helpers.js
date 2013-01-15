@@ -29,6 +29,7 @@ function htmlDecode(value)
 
 function getLocation()
 {
+    // !TODO: BE CARE WITH DEPLOYMENT!!! in 'isLocal' should be passed 'false' on real server.
     var isLocal = true;
     return isLocal ? window.location.protocol + "//" + window.location.hostname + "/fmailer" : window.location.protocol + "//" + window.location.hostname;
 }
@@ -123,11 +124,20 @@ ko.bindingHandlers.typeahead =
             value.target(elem.val());
             if (options == null || options.clearOnBlur == null || options.clearOnBlur == true)
             {
+                value.target(elem.val());
                 elem.val("");
             }
         });
+        if (!(options == null || options.clearOnBlur == null || options.clearOnBlur == true))
+        {
+            elem.change(function ()
+            {
+                value.target(elem.val());
+            });
+        };
         elem.keypress(function (event)
         {
+            value.target(elem.val());
             var keyCode = (event.which ? event.which : event.keyCode);
             if (keyCode === 13)
             {
