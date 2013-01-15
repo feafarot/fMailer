@@ -181,7 +181,19 @@ namespace fMailer.Web.Controllers.Domain
             {
                 var email = CreateMail(recipient, distribution.Template);
                 allMessages.Add(email);
-                smtpClient.Send(email);
+                try
+                {
+                    smtpClient.Send(email);
+                }
+                catch (Exception ex)
+                {
+                    distribution.AddDeliveryFailed(new FailedDelivery { 
+                        IsNew = true,
+                        Subject = "Error on sending e-mail through SMTP",
+                        To = recipient,
+                        EmailText = string.Format("<b>{0}</b><br />{1}", ex.GetType().Name, ex.Message)
+                    });
+                }
             }
         }
 
