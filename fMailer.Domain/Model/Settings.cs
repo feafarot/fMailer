@@ -23,6 +23,8 @@ namespace fMailer.Domain.Model
 
         public virtual string Password { get; set; }
 
+        public virtual bool SkipSubjectOnParsingEmail { get; set; }
+
         #region IMAP
         
         #endregion

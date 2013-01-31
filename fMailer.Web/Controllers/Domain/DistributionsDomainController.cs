@@ -251,7 +251,8 @@ namespace fMailer.Web.Controllers.Domain
         {
             var lowerOriginal = originalSubject.ToLower();
             var lowerInbox = inboxSubject.ToLower();
-            return "re: " + lowerOriginal == lowerInbox ||
+            return User.Settings.SkipSubjectOnParsingEmail ||
+                   "re: " + lowerOriginal == lowerInbox ||
                    "re:" + lowerOriginal == lowerInbox ||
                    lowerOriginal == lowerInbox ||
                    lowerInbox.Contains(lowerOriginal) ||

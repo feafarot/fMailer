@@ -19,6 +19,7 @@ namespace fMailer.Domain.ModelMappings
             Map(x => x.EmailAddressFrom);
             Map(x => x.Username);
             Map(x => x.Password);
+            Map(x => x.SkipSubjectOnParsingEmail);
 
             Map(x => x.Pop3IsGmail);
             Map(x => x.Pop3Address);

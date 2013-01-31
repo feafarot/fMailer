@@ -56,6 +56,7 @@ namespace fMailer.Web.Controllers
 
             User.Settings.EmailAddressFrom = model.EmailAddressFrom;
             User.Settings.Signature = model.Signature;
+            User.Settings.SkipSubjectOnParsingEmail = model.SkipSubjectOnParsingEmail;
 
             User.Settings.SmtpAddress = model.SmtpAddress;
             User.Settings.SmtpSslPort = model.SmtpSslPort;

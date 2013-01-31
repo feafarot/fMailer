@@ -53,6 +53,14 @@
                 }
             </div>
         </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.SkipSubjectOnParsingEmail, new { @class = "control-label" })
+            <div class="controls">
+                @Html.CheckBoxFor(model => model.SkipSubjectOnParsingEmail)
+                @Html.ValidationMessageFor(model => model.SkipSubjectOnParsingEmail)
+            </div>
+        </div>
     </fieldset>
     <fieldset>
         <legend>SMTP</legend>
